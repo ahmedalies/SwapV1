@@ -17,6 +17,7 @@
     "inversify": "^5.0.1",
     "inversify-express-utils": "^6.2.0",
     "mongoose": "^5.3.10",
+    "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
     "reflect-metadata": "^0.1.12"
   },

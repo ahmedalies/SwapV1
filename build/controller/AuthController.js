@@ -24,6 +24,7 @@ const express = require("express");
 const inversify_express_utils_1 = require("inversify-express-utils");
 const inversify_1 = require("../../node_modules/inversify");
 const types_1 = require("../domain/types");
+const MongoUser_1 = require("../infrastructure/dal/entities/mongo/MongoUser");
 let AuthController = class AuthController {
     constructor(_repositry) {
         this._repositry = _repositry;
@@ -31,7 +32,7 @@ let AuthController = class AuthController {
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                if (req.body.email, req.body.password) {
+                if (req.body.email && req.body.password) {
                     const user = yield this._repositry.login(req.body.email, req.body.password);
                     res.status(200).send({ user: user, error: false });
                 }
@@ -44,6 +45,35 @@ let AuthController = class AuthController {
             }
         });
     }
+    create(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const name = req.body.name;
+                const email = req.body.email;
+                const password = req.body.password;
+                const phone = req.body.phone;
+                if (email && name && password && phone) {
+                    let data = new MongoUser_1.MongoUser();
+                    data.name = name;
+                    data.email = email;
+                    data.password = password;
+                    data.phone = phone;
+                    yield this._repositry.create(data)
+                        .then((user) => {
+                        res.status(200).send({ user: user, error: false });
+                    }).catch((err) => {
+                        res.status(200).send({ message: err, error: true });
+                    });
+                }
+                else {
+                    res.status(200).send({ message: 'email and password field are required', error: true });
+                }
+            }
+            catch (error) {
+                res.status(200).send({ message: error.message, error: true });
+            }
+        });
+    }
 };
 __decorate([
     inversify_express_utils_1.httpPost('/login'),
@@ -52,6 +82,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    inversify_express_utils_1.httpPost('/register'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "create", null);
 AuthController = __decorate([
     inversify_express_utils_1.controller('/user/auth'),
     __param(0, inversify_1.inject(types_1.TYPES.AuthRepository)),

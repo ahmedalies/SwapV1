@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 exports.UserSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -35,6 +36,6 @@ exports.UserSchema = new mongoose_1.Schema({
         type: Date,
         default: Date.now()
     }
-});
+}).plugin(uniqueValidator);
 exports.UserModel = mongoose_1.model('User', exports.UserSchema);
 //# sourceMappingURL=UserSchema.js.map

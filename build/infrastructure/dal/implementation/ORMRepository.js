@@ -23,6 +23,20 @@ let ORMRepository = class ORMRepository {
         });
         return p;
     }
+    createUser(data) {
+        let p = new Promise((resolve, reject) => {
+            let user = new UserSchema_1.UserModel(data);
+            user.save()
+                .then(() => {
+                resolve(data);
+            })
+                .catch((err) => {
+                if (err)
+                    reject(err);
+            });
+        });
+        return p;
+    }
 };
 ORMRepository = __decorate([
     inversify_1.injectable()

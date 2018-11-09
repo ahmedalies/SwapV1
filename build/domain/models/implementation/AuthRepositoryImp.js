@@ -35,6 +35,19 @@ let AuthRepositoryImp = class AuthRepositoryImp extends RepositoryImp_1.Reposito
             return this._dataMapper.toDomain(user);
         });
     }
+    create(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            data.userType = 'individual';
+            data.status = 'ongoing';
+            const p = yield this._repository.createUser(data)
+                .then((user) => {
+                return Promise.resolve(user);
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+            return p;
+        });
+    }
 };
 AuthRepositoryImp = __decorate([
     inversify_1.injectable(),

@@ -1,4 +1,6 @@
 import {Schema, model} from 'mongoose';
+import * as uniqueValidator from 'mongoose-unique-validator'     
+
 
 
 export let UserSchema: Schema = new Schema({
@@ -35,6 +37,6 @@ export let UserSchema: Schema = new Schema({
         type: Date,
         default: Date.now()
     }
-});
+}).plugin(uniqueValidator);
 
 export let UserModel = model('User', UserSchema);
