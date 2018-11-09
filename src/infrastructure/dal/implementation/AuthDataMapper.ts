@@ -1,7 +1,9 @@
 import { EntityDataMapper } from "../interfaces/EntityDataMapper";
 import { DomainUser } from "../../../domain/entities/DomainUser";
 import { MongoUser } from "../entities/mongo/MongoUser";
+import { injectable } from "../../../../node_modules/inversify";
 
+@injectable()
 export class AuthDataMapper implements EntityDataMapper<DomainUser, MongoUser> {
     
     public toDomain(mongoUser: MongoUser): DomainUser {

@@ -13,8 +13,6 @@ let ORMRepository = class ORMRepository {
         let p = new Promise((resolve, reject) => {
             UserSchema_1.UserModel.findOne({ email: email, password: password })
                 .exec((err, res) => {
-                console.log(res);
-                console.log(err);
                 if (err)
                     reject(err);
                 else if (res)

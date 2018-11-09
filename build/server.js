@@ -12,11 +12,13 @@ const types_1 = require("./domain/types");
 const types_2 = require("./infrastructure/dal/types");
 const AuthRepositoryImp_1 = require("./domain/models/implementation/AuthRepositoryImp");
 const ORMRepository_1 = require("./infrastructure/dal/implementation/ORMRepository");
+const AuthDataMapper_1 = require("./infrastructure/dal/implementation/AuthDataMapper");
 // object container
 let container = new inversify_1.Container();
 // bind objects to container
 container.bind(types_1.TYPES.AuthRepository).to(AuthRepositoryImp_1.AuthRepositoryImp);
 container.bind(types_2.TYPES.ORMRepositoryForUserEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.EntityDataMApperForAuth).to(AuthDataMapper_1.AuthDataMapper);
 // build a server
 let server = new inversify_express_utils_1.InversifyExpressServer(container, null, { rootPath: "/api/v1" });
 server.setConfig((app) => {

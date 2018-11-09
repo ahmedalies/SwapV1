@@ -15,6 +15,9 @@ import { TYPES as INFRASTRUCTURE_TYPES } from './infrastructure/dal/types'
 import { AuthRepositoryImp } from './domain/models/implementation/AuthRepositoryImp';
 import { ORMRepository } from './infrastructure/dal/implementation/ORMRepository';
 import { MongoUser } from './infrastructure/dal/entities/mongo/MongoUser';
+import { EntityDataMapper } from './infrastructure/dal/interfaces/EntityDataMapper';
+import { DomainUser } from './domain/entities/DomainUser';
+import { AuthDataMapper } from './infrastructure/dal/implementation/AuthDataMapper';
 
 // object container
 let container = new Container();
@@ -22,6 +25,7 @@ let container = new Container();
 // bind objects to container
 container.bind<AuthRepository>(DOMAIN_TYPES.AuthRepository).to(AuthRepositoryImp)
 container.bind<ORMRepository<MongoUser>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserEntity).to(ORMRepository)
+container.bind<EntityDataMapper<DomainUser, MongoUser>>(INFRASTRUCTURE_TYPES.EntityDataMApperForAuth).to(AuthDataMapper)
 
 
 // build a server

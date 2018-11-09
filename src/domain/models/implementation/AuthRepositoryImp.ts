@@ -9,10 +9,16 @@ import { AuthDataMapper } from "../../../infrastructure/dal/implementation/AuthD
 
 @injectable()
 export class AuthRepositoryImp extends RepositoryImp<DomainUser, MongoUser> implements AuthRepository {
-    
+
     public constructor(
-        @inject(TYPES.ORMRepositoryForUserEntity) repository: ORMRepository<MongoUser>
+        @inject(TYPES.ORMRepositoryForUserEntity) repository: ORMRepository<MongoUser>,
+        @inject(TYPES.EntityDataMApperForAuth) dataMapper: AuthDataMapper
     ){
-        super(repository, new AuthDataMapper());
+        super(repository, dataMapper);
+    }
+
+    public async login(email: string, password: string): Promise<DomainUser> {
+        const user = await this._repository.login(email, password);
+        return this._dataMapper.toDomain(user);
     }
 }

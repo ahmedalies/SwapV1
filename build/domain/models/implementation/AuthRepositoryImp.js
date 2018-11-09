@@ -11,6 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const RepositoryImp_1 = require("./RepositoryImp");
 const inversify_1 = require("inversify");
@@ -18,14 +26,22 @@ const types_1 = require("../../../infrastructure/dal/types");
 const ORMRepository_1 = require("../../../infrastructure/dal/implementation/ORMRepository");
 const AuthDataMapper_1 = require("../../../infrastructure/dal/implementation/AuthDataMapper");
 let AuthRepositoryImp = class AuthRepositoryImp extends RepositoryImp_1.RepositoryImp {
-    constructor(repository) {
-        super(repository, new AuthDataMapper_1.AuthDataMapper());
+    constructor(repository, dataMapper) {
+        super(repository, dataMapper);
+    }
+    login(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this._repository.login(email, password);
+            return this._dataMapper.toDomain(user);
+        });
     }
 };
 AuthRepositoryImp = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(types_1.TYPES.ORMRepositoryForUserEntity)),
-    __metadata("design:paramtypes", [ORMRepository_1.ORMRepository])
+    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMApperForAuth)),
+    __metadata("design:paramtypes", [ORMRepository_1.ORMRepository,
+        AuthDataMapper_1.AuthDataMapper])
 ], AuthRepositoryImp);
 exports.AuthRepositoryImp = AuthRepositoryImp;
 //# sourceMappingURL=AuthRepositoryImp.js.map
