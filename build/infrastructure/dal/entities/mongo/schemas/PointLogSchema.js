@@ -6,29 +6,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var PointSystemSchema_1;
+var PointLogSchema_1;
 const mongoose_1 = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const inversify_1 = require("inversify");
-let PointSystemSchema = PointSystemSchema_1 = class PointSystemSchema {
+let PointLogSchema = PointLogSchema_1 = class PointLogSchema {
     ;
     getModel() {
-        return mongoose_1.model('PointSystem', PointSystemSchema_1._schema);
+        return mongoose_1.model('PointLog', PointLogSchema_1._schema);
     }
 };
-PointSystemSchema._schema = new mongoose_1.Schema({
-    t_ref: {
-        type: String,
+PointLogSchema._schema = new mongoose_1.Schema({
+    u_id: {
+        type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        unique: true
+        ref: 'User'
+    },
+    sub_p_ref: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        required: true,
+        ref: 'SubPointSystem'
     },
     created_at: {
         type: Date,
         default: Date.now()
     }
 }).plugin(uniqueValidator);
-PointSystemSchema = PointSystemSchema_1 = __decorate([
+PointLogSchema = PointLogSchema_1 = __decorate([
     inversify_1.injectable()
-], PointSystemSchema);
-exports.PointSystemSchema = PointSystemSchema;
-//# sourceMappingURL=PointSystemSchema.js.map
+], PointLogSchema);
+exports.PointLogSchema = PointLogSchema;
+//# sourceMappingURL=PointLogSchema.js.map

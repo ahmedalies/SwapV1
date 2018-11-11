@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_1 = require("../../../../../node_modules/inversify");
+const inversify_1 = require("inversify");
 const RepositoryImp_1 = require("../RepositoryImp");
 const PointSystemSchema_1 = require("../../../../infrastructure/dal/entities/mongo/schemas/PointSystemSchema");
 const PointsDataMapper_1 = require("../../../../infrastructure/dal/implementation/PointsDataMapper");

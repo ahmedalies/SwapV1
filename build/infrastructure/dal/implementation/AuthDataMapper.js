@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const DomainUser_1 = require("../../../domain/entities/DomainUser");
-const MongoUser_1 = require("../entities/mongo/MongoUser");
+const MongoUser_1 = require("../entities/mongo/schemas/dal/MongoUser");
 const inversify_1 = require("inversify");
 let AuthDataMapper = class AuthDataMapper {
     toDomain(mongoUser) {

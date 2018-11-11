@@ -12,8 +12,8 @@ export class ConfigurationCreationSchema implements BaseSchema {
             unique: true
         },
         is_created: {
-            type: String,
-            default: false
+            type: Boolean,
+            default: true
         },
         created_at: {
             type: Date,

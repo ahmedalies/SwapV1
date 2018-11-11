@@ -25,6 +25,7 @@ import { DomianPointSystem } from './domain/entities/DomainPointSystem';
 import { MongoPointSystem } from './infrastructure/dal/entities/mongo/schemas/dal/MongoPointSystem';
 import { MongoUserSchema } from './infrastructure/dal/entities/mongo/schemas/UserSchema';
 import { BaseSchema } from './infrastructure/dal/entities/mongo/schemas/BaseSchema';
+import { Configuration } from './configuration';
 
 // object container
 let container = new Container();
@@ -50,6 +51,16 @@ server.setConfig((app) => {
     // mongodb connection
     const MONGO_URI = "mongodb://127.0.0.1:27017/swap-v2";
     mongoose.connect(MONGO_URI || process.env.MONGODB_URI, { useNewUrlParser: true });
+
+    //first run
+    Configuration.configureForFirstRun()
+    .then((res) => {
+        console.info(res);
+    })
+    .catch((err) => {
+        console.error(err);
+        
+    })
 
     var logger = morgan('dev');
     app.use(logger);

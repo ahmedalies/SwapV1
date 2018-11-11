@@ -16,7 +16,7 @@ export class ControlPrivilegeSchema implements BaseSchema {
             type: Date,
             default: Date.now()
         }
-    }).plugin(uniqueValidator);;
+    }).plugin(uniqueValidator);
     public _model;
 
 

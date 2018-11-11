@@ -6,9 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_1 = require("../../../../node_modules/inversify");
+const inversify_1 = require("inversify");
 const DomainPointSystem_1 = require("../../../domain/entities/DomainPointSystem");
-const MongoPointSystem_1 = require("../entities/mongo/MongoPointSystem");
+const MongoPointSystem_1 = require("../entities/mongo/schemas/dal/MongoPointSystem");
 let PointsDataMapper = class PointsDataMapper {
     toDomain(object) {
         let p_system = new DomainPointSystem_1.DomianPointSystem();

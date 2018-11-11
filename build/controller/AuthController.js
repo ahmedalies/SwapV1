@@ -24,7 +24,7 @@ const express = require("express");
 const inversify_express_utils_1 = require("inversify-express-utils");
 const inversify_1 = require("inversify");
 const types_1 = require("../domain/types");
-const MongoUser_1 = require("../infrastructure/dal/entities/mongo/MongoUser");
+const MongoUser_1 = require("../infrastructure/dal/entities/mongo/schemas/dal/MongoUser");
 let AuthController = class AuthController {
     constructor(_repositry) {
         this._repositry = _repositry;

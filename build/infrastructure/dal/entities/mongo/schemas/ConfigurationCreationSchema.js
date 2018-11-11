@@ -6,29 +6,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var PointSystemSchema_1;
+var ConfigurationCreationSchema_1;
 const mongoose_1 = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const inversify_1 = require("inversify");
-let PointSystemSchema = PointSystemSchema_1 = class PointSystemSchema {
+let ConfigurationCreationSchema = ConfigurationCreationSchema_1 = class ConfigurationCreationSchema {
     ;
     getModel() {
-        return mongoose_1.model('PointSystem', PointSystemSchema_1._schema);
+        return mongoose_1.model('ConfigurationCreation', ConfigurationCreationSchema_1._schema);
     }
 };
-PointSystemSchema._schema = new mongoose_1.Schema({
-    t_ref: {
+ConfigurationCreationSchema._schema = new mongoose_1.Schema({
+    name: {
         type: String,
         required: true,
         unique: true
+    },
+    is_created: {
+        type: Boolean,
+        default: true
     },
     created_at: {
         type: Date,
         default: Date.now()
     }
 }).plugin(uniqueValidator);
-PointSystemSchema = PointSystemSchema_1 = __decorate([
+ConfigurationCreationSchema = ConfigurationCreationSchema_1 = __decorate([
     inversify_1.injectable()
-], PointSystemSchema);
-exports.PointSystemSchema = PointSystemSchema;
-//# sourceMappingURL=PointSystemSchema.js.map
+], ConfigurationCreationSchema);
+exports.ConfigurationCreationSchema = ConfigurationCreationSchema;
+//# sourceMappingURL=ConfigurationCreationSchema.js.map

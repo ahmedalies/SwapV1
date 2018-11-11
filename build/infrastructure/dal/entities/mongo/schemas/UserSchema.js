@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var MongoUserSchema_1;
 const mongoose_1 = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const inversify_1 = require("../../../../../../node_modules/inversify");
+const inversify_1 = require("inversify");
 let MongoUserSchema = MongoUserSchema_1 = class MongoUserSchema {
     getModel() {
         return mongoose_1.model('User', MongoUserSchema_1._schema);
@@ -44,6 +44,18 @@ MongoUserSchema._schema = new mongoose_1.Schema({
     avatar: {
         type: String,
         default: ''
+    },
+    points: {
+        type: Number,
+        default: 0
+    },
+    loggoedIn: {
+        type: Boolean,
+        default: false
+    },
+    online: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

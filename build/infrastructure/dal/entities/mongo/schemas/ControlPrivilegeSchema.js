@@ -6,18 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var PointSystemSchema_1;
+var ControlPrivilegeSchema_1;
 const mongoose_1 = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const inversify_1 = require("inversify");
-let PointSystemSchema = PointSystemSchema_1 = class PointSystemSchema {
-    ;
+//holds all system functions
+let ControlPrivilegeSchema = ControlPrivilegeSchema_1 = class ControlPrivilegeSchema {
     getModel() {
-        return mongoose_1.model('PointSystem', PointSystemSchema_1._schema);
+        return mongoose_1.model('ControlPrivilige', ControlPrivilegeSchema_1._schema);
     }
 };
-PointSystemSchema._schema = new mongoose_1.Schema({
-    t_ref: {
+ControlPrivilegeSchema._schema = new mongoose_1.Schema({
+    f_name: {
         type: String,
         required: true,
         unique: true
@@ -27,8 +27,8 @@ PointSystemSchema._schema = new mongoose_1.Schema({
         default: Date.now()
     }
 }).plugin(uniqueValidator);
-PointSystemSchema = PointSystemSchema_1 = __decorate([
+ControlPrivilegeSchema = ControlPrivilegeSchema_1 = __decorate([
     inversify_1.injectable()
-], PointSystemSchema);
-exports.PointSystemSchema = PointSystemSchema;
-//# sourceMappingURL=PointSystemSchema.js.map
+], ControlPrivilegeSchema);
+exports.ControlPrivilegeSchema = ControlPrivilegeSchema;
+//# sourceMappingURL=ControlPrivilegeSchema.js.map

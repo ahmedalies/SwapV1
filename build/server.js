@@ -16,6 +16,7 @@ const AuthDataMapper_1 = require("./infrastructure/dal/implementation/AuthDataMa
 const PointsRepositoryImp_1 = require("./domain/models/implementation/points/PointsRepositoryImp");
 const PointsDataMapper_1 = require("./infrastructure/dal/implementation/PointsDataMapper");
 const UserSchema_1 = require("./infrastructure/dal/entities/mongo/schemas/UserSchema");
+const configuration_1 = require("./configuration");
 // object container
 let container = new inversify_1.Container();
 //interface
@@ -33,6 +34,14 @@ server.setConfig((app) => {
     // mongodb connection
     const MONGO_URI = "mongodb://127.0.0.1:27017/swap-v2";
     mongoose.connect(MONGO_URI || process.env.MONGODB_URI, { useNewUrlParser: true });
+    //first run
+    configuration_1.Configuration.configureForFirstRun()
+        .then((res) => {
+        console.info(res);
+    })
+        .catch((err) => {
+        console.error(err);
+    });
     var logger = morgan('dev');
     app.use(logger);
     app.use(bodyParser.urlencoded({ extended: true }));
