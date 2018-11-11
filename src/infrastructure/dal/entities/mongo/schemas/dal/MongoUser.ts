@@ -7,5 +7,8 @@ export class MongoUser {
     status: string;
     phone: string;
     avatar: string;
+    points: string;
+    isLoggedIn: boolean;
+    online: boolean;
     created_at;
 }

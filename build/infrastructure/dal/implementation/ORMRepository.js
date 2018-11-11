@@ -6,27 +6,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UserSchema_1 = require("../entities/mongo/schemas/UserSchema");
-const inversify_1 = require("../../../../node_modules/inversify");
+const inversify_1 = require("inversify");
 let ORMRepository = class ORMRepository {
-    login(email, password) {
+    findByTwoKeys(k1, k2, v1, v2, model) {
+        console.log(model);
         let p = new Promise((resolve, reject) => {
-            UserSchema_1.UserModel.findOne({ email: email, password: password })
-                .exec((err, res) => {
-                if (err)
-                    reject(err);
-                else if (res)
+            model.getModel().findOne({ k1: v1, k2: v2 })
+                .then((res) => {
+                if (res)
                     resolve(res);
                 else
-                    resolve(null);
+                    reject('document not found');
+            }).
+                catch((err) => {
+                if (err)
+                    reject(err);
             });
         });
         return p;
     }
-    createUser(data) {
+    insert(data, model) {
         let p = new Promise((resolve, reject) => {
-            let user = new UserSchema_1.UserModel(data);
-            user.save()
+            let doc = model.getModel()(data);
+            doc.save()
                 .then(() => {
                 resolve(data);
             })

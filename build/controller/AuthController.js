@@ -22,7 +22,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const inversify_express_utils_1 = require("inversify-express-utils");
-const inversify_1 = require("../../node_modules/inversify");
+const inversify_1 = require("inversify");
 const types_1 = require("../domain/types");
 const MongoUser_1 = require("../infrastructure/dal/entities/mongo/MongoUser");
 let AuthController = class AuthController {
@@ -41,7 +41,7 @@ let AuthController = class AuthController {
                 }
             }
             catch (error) {
-                res.status(200).send({ user: error, error: true });
+                res.status(200).send({ message: error, error: true });
             }
         });
     }
@@ -58,7 +58,7 @@ let AuthController = class AuthController {
                     data.email = email;
                     data.password = password;
                     data.phone = phone;
-                    yield this._repositry.create(data)
+                    yield this._repositry.register(data)
                         .then((user) => {
                         res.status(200).send({ user: user, error: false });
                     }).catch((err) => {

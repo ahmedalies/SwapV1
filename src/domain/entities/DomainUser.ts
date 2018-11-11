@@ -7,5 +7,8 @@ export class DomainUser {
     status: string;
     phone: string;
     avatar: string;
-    created_at;
+    points: string;
+    isLoggedIn: boolean;
+    online: boolean;
+    created_at: Date;
 }
