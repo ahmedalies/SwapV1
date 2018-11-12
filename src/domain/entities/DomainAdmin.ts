@@ -7,5 +7,6 @@ export class DomainAdmin {
     createdAt: string;
     username: string;
     password: string;
-    privilege: [DomainControlPrivilege];
+    accessToken: string;
+    privileges: [];
 }

@@ -24,7 +24,7 @@ const express = require("express");
 const inversify_express_utils_1 = require("inversify-express-utils");
 const inversify_1 = require("inversify");
 const types_1 = require("../domain/types");
-const MongoUser_1 = require("../infrastructure/dal/entities/mongo/schemas/dal/MongoUser");
+const DomainUser_1 = require("../domain/entities/DomainUser");
 let AuthController = class AuthController {
     constructor(_repositry) {
         this._repositry = _repositry;
@@ -53,7 +53,7 @@ let AuthController = class AuthController {
                 const password = req.body.password;
                 const phone = req.body.phone;
                 if (email && name && password && phone) {
-                    let data = new MongoUser_1.MongoUser();
+                    let data = new DomainUser_1.DomainUser();
                     data.name = name;
                     data.email = email;
                     data.password = password;

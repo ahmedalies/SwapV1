@@ -2,10 +2,9 @@ import * as express from 'express';
 import { interfaces, controller, httpPost, request, response, BaseHttpController, httpGet, queryParam } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { TYPES as DOMAIN_TYPES } from '../domain/types';
-import { TYPES as INFRA_TYPES } from "../infrastructure/dal/types";
-import { AuthRepository } from '../domain/models/interfaces/AuthRepository';
-import { MongoUser } from '../infrastructure/dal/entities/mongo/schemas/dal/MongoUser';
-import { MongoUserSchema } from '../infrastructure/dal/entities/mongo/schemas/UserSchema';
+import { AuthRepository } from '../domain/models/auth/AuthRepository';
+import { DALUser } from '../infrastructure/entities/dal/DALUser';
+import {DomainUser} from "../domain/entities/DomainUser";
 
 @controller('/user/auth')
 export class AuthController implements interfaces.Controller{
@@ -34,13 +33,13 @@ export class AuthController implements interfaces.Controller{
             const password = req.body.password;
             const phone = req.body.phone;
             if(email && name && password && phone){
-                let data: MongoUser = new MongoUser();
+                let data: DomainUser = new DomainUser();
                 data.name = name;
                 data.email = email;
                 data.password = password;
                 data.phone = phone;
                 await this._repositry.register(data)
-                .then((user: MongoUser) => {
+                .then((user: DomainUser) => {
                     res.status(200).send({user: user, error: false});
                 }).catch((err) => {
                     res.status(200).send({message: err, error: true});

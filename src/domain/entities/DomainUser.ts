@@ -9,6 +9,7 @@ export class DomainUser {
     avatar: string;
     points: string;
     isLoggedIn: boolean;
+    accessToken: string;
     online: boolean;
     created_at: Date;
 }

@@ -44,4 +44,4 @@ ORMRepository = __decorate([
     inversify_1.injectable()
 ], ORMRepository);
 exports.ORMRepository = ORMRepository;
-//# sourceMappingURL=ORMRepository.js.map
+//# sourceMappingURL=MongoORMRepository.js.map

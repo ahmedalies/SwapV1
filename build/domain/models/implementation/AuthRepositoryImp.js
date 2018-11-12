@@ -56,8 +56,8 @@ let AuthRepositoryImp = class AuthRepositoryImp extends RepositoryImp_1.Reposito
 AuthRepositoryImp = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(types_1.TYPES.ORMRepositoryForUserEntity)),
-    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMApperForAuth)),
-    __param(2, inversify_1.inject(types_1.TYPES.UserMongoSchema)),
+    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMapperForAuth)),
+    __param(2, inversify_1.inject(types_1.TYPES.UserSchema)),
     __metadata("design:paramtypes", [ORMRepository_1.ORMRepository,
         AuthDataMapper_1.AuthDataMapper,
         UserSchema_1.MongoUserSchema])

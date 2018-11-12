@@ -49,7 +49,7 @@ MongoUserSchema._schema = new mongoose_1.Schema({
         type: Number,
         default: 0
     },
-    loggoedIn: {
+    loggedIn: {
         type: Boolean,
         default: false
     },

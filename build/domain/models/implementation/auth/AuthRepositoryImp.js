@@ -20,41 +20,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var _a, _b;
-const RepositoryImp_1 = require("./RepositoryImp");
+const RepositoryImp_1 = require("../RepositoryImp");
 const inversify_1 = require("inversify");
-const types_1 = require("../../../infrastructure/dal/types");
-const AuthDataMapper_1 = require("../../../infrastructure/dal/implementation/AuthDataMapper");
-const AuthOrmRepository_1 = require("../../../infrastructure/dal/implementation/AuthOrmRepository");
+const types_1 = require("../../../../infrastructure/dal/types");
+const ORMRepository_1 = require("../../../../infrastructure/dal/implementation/ORMRepository");
+const AuthDataMapper_1 = require("../../../../infrastructure/dal/implementation/AuthDataMapper");
+const UserSchema_1 = require("../../../../infrastructure/dal/entities/mongo/schemas/UserSchema");
 let AuthRepositoryImp = class AuthRepositoryImp extends RepositoryImp_1.RepositoryImp {
-    constructor(repository, dataMapper) {
-        super(repository, dataMapper);
+    constructor(repository, dataMapper, model) {
+        super(repository, dataMapper, model);
     }
     login(email, password) {
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this._repository.login(email, password);
-            return this._dataMapper.toDomain(user);
+            const user = yield _super("findByTwoKeys").call(this, 'email', 'password', email, password)
+                .then((doc) => {
+                return Promise.resolve(doc);
+            }).catch((err) => {
+                if (err === 'document not found')
+                    return Promise.reject('invalid credentials');
+                else
+                    return Promise.reject(err);
+            });
+            return user;
         });
     }
-    create(data) {
+    register(userData) {
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
-            data.userType = 'individual';
-            data.status = 'ongoing';
-            const p = yield this._repository.createUser(data)
-                .then((user) => {
-                return Promise.resolve(user);
-            }).catch((err) => {
-                return Promise.reject(err);
-            });
-            return p;
+            const user = yield _super("insert").call(this, userData);
+            return user;
         });
     }
 };
 AuthRepositoryImp = __decorate([
     inversify_1.injectable(),
-    __param(0, inversify_1.inject(types_1.TYPES.ORMRepositoryForAuthMongo)),
-    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMApperForAuth)),
-    __metadata("design:paramtypes", [typeof (_a = typeof AuthOrmRepository_1.AuthOrmRepository !== "undefined" && AuthOrmRepository_1.AuthOrmRepository) === "function" ? _a : Object, typeof (_b = typeof AuthDataMapper_1.AuthDataMapper !== "undefined" && AuthDataMapper_1.AuthDataMapper) === "function" ? _b : Object])
+    __param(0, inversify_1.inject(types_1.TYPES.ORMRepositoryForUserEntity)),
+    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMapperForAuth)),
+    __param(2, inversify_1.inject(types_1.TYPES.UserSchema)),
+    __metadata("design:paramtypes", [ORMRepository_1.ORMRepository,
+        AuthDataMapper_1.AuthDataMapper,
+        UserSchema_1.MongoUserSchema])
 ], AuthRepositoryImp);
 exports.AuthRepositoryImp = AuthRepositoryImp;
 //# sourceMappingURL=AuthRepositoryImp.js.map

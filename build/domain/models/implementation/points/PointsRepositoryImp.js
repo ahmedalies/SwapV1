@@ -26,8 +26,8 @@ let PointsRepositoryImp = class PointsRepositoryImp extends RepositoryImp_1.Repo
 PointsRepositoryImp = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(types_1.TYPES.ORMRepositoryForUserEntity)),
-    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMApperForPoint)),
-    __param(2, inversify_1.inject(types_1.TYPES.UserMongoSchema)),
+    __param(1, inversify_1.inject(types_1.TYPES.EntityDataMapperForPoint)),
+    __param(2, inversify_1.inject(types_1.TYPES.UserSchema)),
     __metadata("design:paramtypes", [ORMRepository_1.ORMRepository,
         PointsDataMapper_1.PointsDataMapper,
         PointSystemSchema_1.PointSystemSchema])
