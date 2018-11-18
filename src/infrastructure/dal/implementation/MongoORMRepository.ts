@@ -27,6 +27,18 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
+    public async findAllByOneKey(query: any, model: BaseSchema): Promise<DALEntity[]> {
+        return await new Promise<DALEntity[]>((resolve, reject) => {
+            model.getModel().find({query})
+                .then((res) => {
+                    if (res) resolve(res);
+                    else reject('document not found');
+                }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
     public async findByTwoKeys(k1: string, k2: string, v1:string|number|boolean, v2: string|number|boolean, model: BaseSchema): Promise<DALEntity> {
         return await new Promise<DALEntity>((resolve, reject) => {
             model.getModel().findOne({k1: v1, k2: v2})
@@ -42,14 +54,13 @@ export class MongoORMRepository<DALEntity> {
 
     public async insert(data: DALEntity, model: BaseSchema): Promise<DALEntity> {
         return await new Promise<DALEntity>((resolve, reject) => {
-            let doc = model.getModel()(data);
-            doc.save()
-            .then(() => {
-                resolve(data);
-            })
-            .catch((err) => {
-                reject(err)
-            });
+            model.getModel().collection.insertOne(data)
+                .then((res) => {
+                    resolve(res.ops[0]);
+                })
+                .catch((err) => {
+                    reject(err)
+                });
         });
     }
 

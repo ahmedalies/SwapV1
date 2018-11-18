@@ -6,4 +6,5 @@ export interface Repository<T> {
     insert(object: T): Promise<T>;
     update(id: string, object: T): Promise<T>;
     remove(id: string): Promise<boolean>;
+    findAllByOnKey(queryElement: any): Promise<T[]>;
 }

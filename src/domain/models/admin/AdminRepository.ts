@@ -7,14 +7,17 @@ import {DomainControlPrivilege} from "../../entities/DomainControlPrivilege";
 
 export interface AdminRepository extends Repository<DomainAdmin> {
 
+    //privilege functions
     hasPrivilege(adminId, privilege: string): Promise<DomainAdmin>;
     getPrivilege(privilegeName: string): Promise<DomainControlPrivilege>;
 
+    //admin functions
     createAdmin(creatorId: string, admin: DomainAdmin): Promise<DomainAdmin>;
     getAdmin(creatorId: string, id: string): Promise<DomainAdmin>;
     updateAdmin(creatorId: string, id: string, admin: DomainAdmin): Promise<DomainAdmin>;
     removeAdmin(creatorId: string, id: string): Promise<boolean>;
 
+    //interests functions
     addInterest(adminId: string, interest: DomainInterest): Promise<DomainInterest>;
     getInterest(adminId: string, id: string): Promise<DomainInterest>;
     updateInterest(adminId: string, id: string, interest: DomainInterest): Promise<DomainInterest>;

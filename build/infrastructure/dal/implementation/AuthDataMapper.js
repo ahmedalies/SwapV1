@@ -41,4 +41,4 @@ AuthDataMapper = __decorate([
     inversify_1.injectable()
 ], AuthDataMapper);
 exports.AuthDataMapper = AuthDataMapper;
-//# sourceMappingURL=AuthDataMapper.js.map
+//# sourceMappingURL=UserDataMapper.js.map

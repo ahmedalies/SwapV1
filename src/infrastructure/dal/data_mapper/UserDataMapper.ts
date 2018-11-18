@@ -5,7 +5,7 @@ import { injectable } from "inversify";
 import {mongo} from "mongoose";
 
 @injectable()
-export class AuthDataMapper implements EntityDataMapper<DomainUser, DALUser> {
+export class UserDataMapper implements EntityDataMapper<DomainUser, DALUser> {
     
     public toDomain(mongoUser: DALUser): DomainUser {
         let domainUser: DomainUser = new DomainUser();

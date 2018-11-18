@@ -5,7 +5,7 @@ import { AuthRepository } from "./AuthRepository";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../../../infrastructure/types";
 import { MongoORMRepository } from "../../../infrastructure/dal/implementation/MongoORMRepository";
-import { AuthDataMapper } from "../../../infrastructure/dal/data_mapper/AuthDataMapper";
+import { UserDataMapper } from "../../../infrastructure/dal/data_mapper/UserDataMapper";
 import { UserSchema } from "../../../infrastructure/entities/mongo/schemas/UserSchema";
 
 @injectable()
@@ -13,7 +13,7 @@ export class AuthRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
 
     public constructor(
         @inject(TYPES.ORMRepositoryForUserEntity) repository: MongoORMRepository<DALUser>,
-        @inject(TYPES.EntityDataMapperForAuth) dataMapper: AuthDataMapper,
+        @inject(TYPES.EntityDataMapperForUser) dataMapper: UserDataMapper,
         @inject(TYPES.UserSchema) model: UserSchema
     ){
         super(repository, dataMapper, model);

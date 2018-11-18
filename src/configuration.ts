@@ -73,7 +73,7 @@ export class Configuration {
                 {f_name: 'getAdmin'},
                 {f_name: 'updateAdmin'},
                 {f_name: 'removeAdmin'},
-                //interests
+                //interests for admin
                 {f_name: 'addInterest'},
                 {f_name: 'getInterest'},
                 {f_name: 'updateInterest'},

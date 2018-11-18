@@ -10,7 +10,6 @@ import {TYPES} from "../../../infrastructure/types";
 import {TYPES as DOMAIN_TYPES} from "../../types";
 import {InterestsRepositoryImp} from "../interests/InterestsRepositoryImp";
 import {InterestsRepository} from "../interests/InterestsRepository";
-import {Configuration} from "../../../configuration";
 import {PrivilegeRepository} from "../privileges/PrivilegeRepository";
 import {PrivilegeRepositoryImp} from "../privileges/PrivilegeRepositoryImp";
 import {DomainInterest} from "../../entities/DomainInterest";

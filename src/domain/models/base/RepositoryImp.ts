@@ -81,4 +81,19 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
                 return Promise.reject(err);
             });
     }
+
+    public async findAllByOnKey(queryElement: any): Promise<DomainEntity[]> {
+        return await this._repository.findAllByOneKey(queryElement, this._model)
+            .then((interests: DALEntity[]) => {
+                let domainEntities = [];
+                if (interests) {
+                    interests.forEach((item) => {
+                        domainEntities.push(this._dataMapper.toDomain(item));
+                    });
+                }
+                return Promise.resolve(domainEntities);
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+    }
 }
