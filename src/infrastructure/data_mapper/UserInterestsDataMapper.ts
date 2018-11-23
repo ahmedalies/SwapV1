@@ -1,5 +1,5 @@
-import {DomainUserInterests} from "../../../domain/entities/DomainUserInterests";
-import {DALUserInterests} from "../../entities/dal/DALUserInterests";
+import {DomainUserInterests} from "../../domain/entities/DomainUserInterests";
+import {DALUserInterests} from "../entities/dal/DALUserInterests";
 import {EntityDataMapper} from "../interfaces/EntityDataMapper";
 import {injectable} from "inversify";
 

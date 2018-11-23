@@ -1,11 +1,17 @@
 import { ConfigurationCreationSchema as ConfModel } from "./infrastructure/entities/mongo/schemas/ConfigurationCreationSchema";
 import { ControlPrivilegeSchema as PrivilegeModel } from "./infrastructure/entities/mongo/schemas/ControlPrivilegeSchema";
 import {AdminSchema as AdminModel} from "./infrastructure/entities/mongo/schemas/AdminSchema";
+import {SwapRequestSchema as SwapRequestModel} from './infrastructure/entities/mongo/schemas/SwapRequestSchema'
+import {ItemSchema as ItemModel} from './infrastructure/entities/mongo/schemas/ItemSchema'
+import {isUndefined} from "util";
 export class Configuration {
 
     static conf:ConfModel = new ConfModel();
     static privilege: PrivilegeModel = new PrivilegeModel();
     static admin: AdminModel = new AdminModel();
+    static swapRequest: SwapRequestModel = new SwapRequestModel();
+    static item: ItemModel = new ItemModel();
+    static intervals: string[] = [];
 
 
     public static async configureForFirstRun(): Promise<string>{
@@ -36,6 +42,8 @@ export class Configuration {
             .catch((err) => {
                 reject(err);
             })
+
+            //register 7 days intervals
         });
     }
 
@@ -109,5 +117,28 @@ export class Configuration {
                     reject(err);
                 });
         });
+    }
+
+    private static async regsiter7DaysIntervals(): Promise<string> {
+        // Configuration.item.getModel().collection.find({})
+        //     .then((res) => {
+        //         if (res && res.length) {
+        //             res.forEach((x) => {
+        //                 Configuration.intervals.push(x._id) = setInterval(() => {
+        //                     console.log('-1000');
+        //                     if (x[0].oneWeekMilli >= 1000){
+        //                         x[0].oneWeekMilli = x[0].oneWeekMilli - 1000;
+        //                     } else {
+        //                         x[0].oneWeekMilli = 0;
+        //                         x[0].status = "blocked for 1 week policy without accepting requests";
+        //                     }
+        //                     x.save();
+        //                 }, 1000);
+        //             });
+        //         }
+        //     }).catch((err) => {
+        //
+        //     });
+        return null;
     }
 }

@@ -1,6 +1,6 @@
 import {EntityDataMapper} from "../interfaces/EntityDataMapper";
-import {DomainInterest} from "../../../domain/entities/DomainInterest";
-import {DALInterest} from "../../entities/dal/DALInterest";
+import {DomainInterest} from "../../domain/entities/DomainInterest";
+import {DALInterest} from "../entities/dal/DALInterest";
 import {injectable} from "inversify";
 
 @injectable()

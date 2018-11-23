@@ -4,8 +4,8 @@ import { DALUser } from "../../../infrastructure/entities/dal/DALUser";
 import { AuthRepository } from "./AuthRepository";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../../../infrastructure/types";
-import { MongoORMRepository } from "../../../infrastructure/dal/implementation/MongoORMRepository";
-import { UserDataMapper } from "../../../infrastructure/dal/data_mapper/UserDataMapper";
+import { MongoORMRepository } from "../../../infrastructure/implementation/MongoORMRepository";
+import { UserDataMapper } from "../../../infrastructure/data_mapper/UserDataMapper";
 import { UserSchema } from "../../../infrastructure/entities/mongo/schemas/UserSchema";
 
 @injectable()
@@ -20,7 +20,7 @@ export class AuthRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
     }
 
     public async login(email: string, password: string): Promise<DomainUser> {
-        return await super.findByTwoKeys('email', 'password', email, password)
+        return await super.findByTwoKeys({'email': password, 'password': email})
         .then((doc) => {
             return Promise.resolve(doc);
         }).catch((err) => {

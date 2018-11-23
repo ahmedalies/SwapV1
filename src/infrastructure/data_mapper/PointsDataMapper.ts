@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { EntityDataMapper } from "../interfaces/EntityDataMapper";
-import { DomianPointSystem } from "../../../domain/entities/DomainPointSystem";
-import { DALPointSystem } from "../../entities/dal/DALPointSystem";
+import { DomianPointSystem } from "../../domain/entities/DomainPointSystem";
+import { DALPointSystem } from "../entities/dal/DALPointSystem";
 
 @injectable()
 export class PointsDataMapper implements EntityDataMapper<DomianPointSystem, DALPointSystem> {

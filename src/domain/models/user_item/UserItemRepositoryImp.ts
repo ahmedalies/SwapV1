@@ -5,8 +5,8 @@ import {UserItemRepository} from "./UserItemRepository";
 import {inject, injectable} from "inversify";
 import {ItemSchema} from "../../../infrastructure/entities/mongo/schemas/ItemSchema";
 import {TYPES} from "../../../infrastructure/types";
-import {ItemDataMapper} from "../../../infrastructure/dal/data_mapper/ItemDataMapper";
-import {MongoORMRepository} from "../../../infrastructure/dal/implementation/MongoORMRepository";
+import {ItemDataMapper} from "../../../infrastructure/data_mapper/ItemDataMapper";
+import {MongoORMRepository} from "../../../infrastructure/implementation/MongoORMRepository";
 
 @injectable()
 export class UserItemRepositoryImp extends RepositoryImp<DomainItem, DALItem> implements UserItemRepository {
@@ -20,11 +20,28 @@ export class UserItemRepositoryImp extends RepositoryImp<DomainItem, DALItem> im
     }
 
     public async addItem(object: DomainItem): Promise<DomainItem> {
-        return await super.insert(object);
+        object.createdAt = Date.now();
+        object.status = "available";
+        object.oneWeekMilli = 604800000;
+        return await new Promise<DomainItem>((resolve, reject) => {
+           super.insert(object)
+               .then((res) => {
+                   resolve(res);
+               }).catch((err) => {
+                   reject(err);
+               });
+        });
     }
 
     public async updateItem(itemId: string, object: DomainItem): Promise<DomainItem> {
-        return await super.update(itemId, object);
+        return await new Promise<DomainItem>((resolve, reject) => {
+            super.update(itemId, object)
+                .then((res) => {
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+        });
     }
 
     public async getOneItem(itemId: string): Promise<DomainItem> {

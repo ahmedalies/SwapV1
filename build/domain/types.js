@@ -10,8 +10,10 @@ exports.TYPES = {
     UserInterestsRepository: Symbol.for('UserInterestsRepository'),
     UserRepository: Symbol.for('UserRepository'),
     UserItemRepository: Symbol.for('UserItemRepository'),
+    SwapRequestRepository: Symbol.for('SwapRequestRepository'),
     //services
     UserInterestService: Symbol.for('UserInterestService'),
     UserItemService: Symbol.for('UserItemService'),
+    SwapRequestService: Symbol.for('SwapRequestService'),
 };
 //# sourceMappingURL=types.js.map

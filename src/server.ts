@@ -12,18 +12,19 @@ import './controller/InterestsController'
 import './controller/AdminController'
 import './controller/UserInterestContoller'
 import './controller/UserItemController'
+import './controller/SwapRequestContoller'
 
 import { AuthRepository } from './domain/models/auth/AuthRepository';
 import { TYPES as DOMAIN_TYPES } from './domain/types';
 import { TYPES as INFRASTRUCTURE_TYPES } from './infrastructure/types'
 import { AuthRepositoryImp } from './domain/models/auth/AuthRepositoryImp';
-import { MongoORMRepository } from './infrastructure/dal/implementation/MongoORMRepository';
+import { MongoORMRepository } from './infrastructure/implementation/MongoORMRepository';
 import { DALUser } from './infrastructure/entities/dal/DALUser';
-import { EntityDataMapper } from './infrastructure/dal/interfaces/EntityDataMapper';
+import { EntityDataMapper } from './infrastructure/interfaces/EntityDataMapper';
 import { DomainUser } from './domain/entities/DomainUser';
-import { UserDataMapper } from './infrastructure/dal/data_mapper/UserDataMapper';
+import { UserDataMapper } from './infrastructure/data_mapper/UserDataMapper';
 import { PointsRepositoryImp } from './domain/models/points/PointsRepositoryImp';
-import { PointsDataMapper } from './infrastructure/dal/data_mapper/PointsDataMapper';
+import { PointsDataMapper } from './infrastructure/data_mapper/PointsDataMapper';
 import { PointsRepository } from './domain/models/points/PointsRepository';
 import { DomianPointSystem } from './domain/entities/DomainPointSystem';
 import { DALPointSystem } from './infrastructure/entities/dal/DALPointSystem';
@@ -33,36 +34,43 @@ import {InterestsRepository} from "./domain/models/interests/InterestsRepository
 import {InterestsRepositoryImp} from "./domain/models/interests/InterestsRepositoryImp";
 import {DomainInterest} from "./domain/entities/DomainInterest";
 import {DALInterest} from "./infrastructure/entities/dal/DALInterest";
-import {InterestDataMapper} from "./infrastructure/dal/data_mapper/InterestDataMapper";
+import {InterestDataMapper} from "./infrastructure/data_mapper/InterestDataMapper";
 import {InterestSchema} from "./infrastructure/entities/mongo/schemas/InterestSchema";
 import {AdminSchema} from "./infrastructure/entities/mongo/schemas/AdminSchema";
 import {AdminRepositoryImp} from "./domain/models/admin/AdminRepositoryImp";
 import {DomainAdmin} from "./domain/entities/DomainAdmin";
 import {DALAdmin} from "./infrastructure/entities/dal/DALAdmin";
-import {AdminDataMapper} from "./infrastructure/dal/data_mapper/AdminDataMapper";
+import {AdminDataMapper} from "./infrastructure/data_mapper/AdminDataMapper";
 import {AdminRepository} from "./domain/models/admin/AdminRepository";
 import {PrivilegeRepository} from "./domain/models/privileges/PrivilegeRepository";
 import {PrivilegeRepositoryImp} from "./domain/models/privileges/PrivilegeRepositoryImp";
 import {ControlPrivilegeSchema} from "./infrastructure/entities/mongo/schemas/ControlPrivilegeSchema";
 import {DomainControlPrivilege} from "./domain/entities/DomainControlPrivilege";
 import {DALControlPrivilege} from "./infrastructure/entities/dal/DALControlPrivilege";
-import {PrivilegeDataMapper} from "./infrastructure/dal/data_mapper/PrivilegeDataMapper";
+import {PrivilegeDataMapper} from "./infrastructure/data_mapper/PrivilegeDataMapper";
 import {DALUserInterests} from "./infrastructure/entities/dal/DALUserInterests";
 import {UserInterestSchema} from "./infrastructure/entities/mongo/schemas/UserInterestsSchema";
 import {UserInterestsRepository} from "./domain/models/user_interests/UserInterestsRepository";
 import {UserInterestsRepositoryImp} from "./domain/models/user_interests/UserInterestsRepositoryImp";
 import {DomainUserInterests} from "./domain/entities/DomainUserInterests";
-import {UserInterestsDataMapper} from "./infrastructure/dal/data_mapper/UserInterestsDataMapper";
+import {UserInterestsDataMapper} from "./infrastructure/data_mapper/UserInterestsDataMapper";
 import {UserRepository} from "./domain/models/user/UserRepository";
 import {UserRepositoryImp} from "./domain/models/user/UserRepositoryImp";
 import {UserInterestService} from "./domain/services/UserInterestService";
 import {DALItem} from "./infrastructure/entities/dal/DALItem";
 import {ItemSchema} from "./infrastructure/entities/mongo/schemas/ItemSchema";
-import {ItemDataMapper} from "./infrastructure/dal/data_mapper/ItemDataMapper";
+import {ItemDataMapper} from "./infrastructure/data_mapper/ItemDataMapper";
 import {DomainItem} from "./domain/entities/DomainItem";
 import {UserItemService} from "./domain/services/UserItemService";
 import {UserItemRepository} from "./domain/models/user_item/UserItemRepository";
 import {UserItemRepositoryImp} from "./domain/models/user_item/UserItemRepositoryImp";
+import {SwapRequestRepositoryImp} from "./domain/models/swap_request/SwapRequestRepositoryImp";
+import {SwapRequestRepository} from "./domain/models/swap_request/SwapRequestRepository";
+import {SwapRequestSchema} from "./infrastructure/entities/mongo/schemas/SwapRequestSchema";
+import {SwapRequestMapper} from "./infrastructure/data_mapper/SwapRequestMapper";
+import {DALSwapRequest} from "./infrastructure/entities/dal/DALSwapRequest";
+import {DomainSwapRequest} from "./domain/entities/DomainSwapRequest";
+import {SwapRequestService} from "./domain/services/SwapRequestService";
 
 // object container
 let container = new Container();
@@ -76,6 +84,7 @@ container.bind<PrivilegeRepository>(DOMAIN_TYPES.PrivilegeRepository).to(Privile
 container.bind<UserInterestsRepository>(DOMAIN_TYPES.UserInterestsRepository).to(UserInterestsRepositoryImp);
 container.bind<UserRepository>(DOMAIN_TYPES.UserRepository).to(UserRepositoryImp);
 container.bind<UserItemRepository>(DOMAIN_TYPES.UserItemRepository).to(UserItemRepositoryImp);
+container.bind<SwapRequestRepository>(DOMAIN_TYPES.SwapRequestRepository).to(SwapRequestRepositoryImp);
 
 //orm-mongo
 container.bind<MongoORMRepository<DALUser>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserEntity).to(MongoORMRepository);
@@ -84,6 +93,7 @@ container.bind<MongoORMRepository<DALAdmin>>(INFRASTRUCTURE_TYPES.ORMRepositoryF
 container.bind<MongoORMRepository<DALControlPrivilege>>(INFRASTRUCTURE_TYPES.ORMRepositoryForPrivilegeEntity).to(MongoORMRepository);
 container.bind<MongoORMRepository<DALUserInterests>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserInterestsEntity).to(MongoORMRepository);
 container.bind<MongoORMRepository<DALItem>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserItemEntity).to(MongoORMRepository);
+container.bind<MongoORMRepository<DALSwapRequest>>(INFRASTRUCTURE_TYPES.ORMRepositoryForSwapRequestEntity).to(MongoORMRepository);
 
 //Schemas
 container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.UserSchema).to(UserSchema);
@@ -92,6 +102,7 @@ container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.AdminSchema).to(AdminSchema);
 container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.PrivilegeSchema).to(ControlPrivilegeSchema);
 container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.UserInterestSchema).to(UserInterestSchema);
 container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.ItemSchema).to(ItemSchema);
+container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.SwapRequestSchema).to(SwapRequestSchema);
 
 //data-mapper
 container.bind<EntityDataMapper<DomainUser, DALUser>>(INFRASTRUCTURE_TYPES.EntityDataMapperForUser).to(UserDataMapper);
@@ -101,10 +112,12 @@ container.bind<EntityDataMapper<DomainAdmin, DALAdmin>>(INFRASTRUCTURE_TYPES.Ent
 container.bind<EntityDataMapper<DomainControlPrivilege, DALControlPrivilege>>(INFRASTRUCTURE_TYPES.EntityDataMapperForPrivilege).to(PrivilegeDataMapper);
 container.bind<EntityDataMapper<DomainUserInterests, DALUserInterests>>(INFRASTRUCTURE_TYPES.EntityDataMapperForUserInterests).to(UserInterestsDataMapper);
 container.bind<EntityDataMapper<DomainItem, DALItem>>(INFRASTRUCTURE_TYPES.EntityDataMapperForItem).to(ItemDataMapper);
+container.bind<EntityDataMapper<DomainSwapRequest, DALSwapRequest>>(INFRASTRUCTURE_TYPES.EntityDataMapperForSwapRequest).to(SwapRequestMapper);
 
 //services
 container.bind<UserInterestService>(DOMAIN_TYPES.UserInterestService).to(UserInterestService);
 container.bind<UserItemService>(DOMAIN_TYPES.UserItemService).to(UserItemService);
+container.bind<SwapRequestService>(DOMAIN_TYPES.SwapRequestService).to(SwapRequestService);
 
 
 // build a server

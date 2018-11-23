@@ -12,7 +12,7 @@ export class UserItemController implements interfaces.Controller {
     public async addItem(@request() req: Request, @response() res: Response){
         await this.service.addItem(req.body)
             .then((r) => {
-                res.status(200).send({message: r, error: false});
+                res.status(200).send({item: r, error: false});
             }).catch((err) => {
                 res.status(200).send({message: err, error: true});
             });

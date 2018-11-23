@@ -1,6 +1,6 @@
 import { EntityDataMapper } from "../interfaces/EntityDataMapper";
-import { DomainUser } from "../../../domain/entities/DomainUser";
-import { DALUser } from "../../entities/dal/DALUser";
+import { DomainUser } from "../../domain/entities/DomainUser";
+import { DALUser } from "../entities/dal/DALUser";
 import { injectable } from "inversify";
 import {mongo} from "mongoose";
 

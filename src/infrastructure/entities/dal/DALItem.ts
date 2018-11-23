@@ -1,13 +1,12 @@
-import {DALInterest} from "./DALInterest";
 
 export  class DALItem {
     _id: string;
     status: string;
-    onWeekMilli: number;
+    oneWeekMilli: number;
     owner: string;
     name: string;
     description: string;
-    category: DALInterest;
+    category: string;
     i_urls: any[];
-    createdAt: Date;
+    createdAt: number;
 }

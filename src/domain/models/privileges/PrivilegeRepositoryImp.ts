@@ -4,8 +4,8 @@ import {DALControlPrivilege} from "../../../infrastructure/entities/dal/DALContr
 import {PrivilegeRepository} from "./PrivilegeRepository";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../../infrastructure/types";
-import {MongoORMRepository} from "../../../infrastructure/dal/implementation/MongoORMRepository";
-import {PrivilegeDataMapper} from "../../../infrastructure/dal/data_mapper/PrivilegeDataMapper";
+import {MongoORMRepository} from "../../../infrastructure/implementation/MongoORMRepository";
+import {PrivilegeDataMapper} from "../../../infrastructure/data_mapper/PrivilegeDataMapper";
 import {ControlPrivilegeSchema} from "../../../infrastructure/entities/mongo/schemas/ControlPrivilegeSchema";
 
 @injectable()

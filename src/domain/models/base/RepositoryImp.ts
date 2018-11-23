@@ -1,6 +1,6 @@
 import { Repository } from "./Repository";
-import { MongoORMRepository } from "../../../infrastructure/dal/implementation/MongoORMRepository";
-import { EntityDataMapper } from "../../../infrastructure/dal/interfaces/EntityDataMapper";
+import { MongoORMRepository } from "../../../infrastructure/implementation/MongoORMRepository";
+import { EntityDataMapper } from "../../../infrastructure/interfaces/EntityDataMapper";
 import { inject, unmanaged, injectable } from "inversify";
 import { BaseSchema } from "../../../infrastructure/entities/mongo/schemas/BaseSchema";
 
@@ -23,17 +23,17 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
 
     public async insert(data: DomainEntity): Promise<DomainEntity> {
         return await this._repository.insert(this._dataMapper.toDAL(data), this._model)
-        .then((user: DALEntity) => {
-            return Promise.resolve(this._dataMapper.toDomain(user));
+        .then((res: DALEntity) => {
+            return Promise.resolve(this._dataMapper.toDomain(res));
         }).catch((err) => {
             return Promise.reject(err);
         });
     }
 
-    public async findByTwoKeys(k1: string, k2: string, v1: string|number|boolean, v2: string|number|boolean): Promise<DomainEntity>{
-        return await this._repository.findByTwoKeys(k1, k2, v1, v2, this._model)
-        .then((user: DALEntity) => {
-            return Promise.resolve(this._dataMapper.toDomain(user));
+    public async findByTwoKeys(queryElement: any): Promise<DomainEntity>{
+        return await this._repository.findByTwoKeys(queryElement, this._model)
+        .then((res: DALEntity) => {
+            return Promise.resolve(this._dataMapper.toDomain(res));
         }).catch((err) => {
             return Promise.reject(err);
         });
@@ -42,10 +42,10 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
 
     public async findAll(): Promise<DomainEntity[]> {
         return await this._repository.findAll(this._model)
-            .then((interests: DALEntity[]) => {
+            .then((res: DALEntity[]) => {
                 let domainEntities = [];
-                if (interests) {
-                    interests.forEach((item) => {
+                if (res) {
+                    res.forEach((item) => {
                         domainEntities.push(this._dataMapper.toDomain(item));
                     });
                 }
@@ -66,8 +66,8 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
 
     public async update(id: string, object: DomainEntity): Promise<DomainEntity> {
         return await this._repository.update(id, this._dataMapper.toDAL(object), this._model)
-            .then((interest: DALEntity) => {
-                return Promise.resolve(this._dataMapper.toDomain(interest));
+            .then((res: DALEntity) => {
+                return Promise.resolve(this._dataMapper.toDomain(res));
             }).catch((err) => {
                 return Promise.reject(err);
             });
@@ -75,7 +75,7 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
 
     public async remove(id: string): Promise<boolean> {
         return await this._repository.remove(id, this._model)
-            .then((interest) => {
+            .then((res) => {
                 return Promise.resolve(true);
             }).catch((err) => {
                 return Promise.reject(err);
@@ -84,10 +84,10 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
 
     public async findAllByOnKey(queryElement: any): Promise<DomainEntity[]> {
         return await this._repository.findAllByOneKey(queryElement, this._model)
-            .then((interests: DALEntity[]) => {
+            .then((res: DALEntity[]) => {
                 let domainEntities = [];
-                if (interests) {
-                    interests.forEach((item) => {
+                if (res) {
+                    res.forEach((item) => {
                         domainEntities.push(this._dataMapper.toDomain(item));
                     });
                 }

@@ -7,7 +7,7 @@ import { injectable } from 'inversify';
 export class ItemSchema implements BaseSchema {
 
     public static _schema: Schema = new Schema({
-        /*available - **not-available** - blocked - in-review - rejected - swapped*/
+        /*available - **not-available** - blocked - in-review - rejected - in-swapping - swapped*/
         /*
          * -available -> indicates user_item available for swapping
          * -in-review -> user_item goes in-review on **admin due to report or 1 week policy or**
@@ -25,9 +25,9 @@ export class ItemSchema implements BaseSchema {
          * */
         status: {
             type: String,
-            default: 'ongoing'
+            default: 'available'
         },
-        onWeekMilli: {
+        oneWeekMilli: {
             type: Number,
             default: 604800000,
         },
@@ -51,8 +51,7 @@ export class ItemSchema implements BaseSchema {
             url: String
         }],
         createdAt: {
-            type: Date,
-            default: Date.now()
+            type: Number,
         }
     }).plugin(uniqueValidator);
 

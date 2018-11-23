@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { BaseSchema } from "../../entities/mongo/schemas/BaseSchema";
+import { BaseSchema } from "../entities/mongo/schemas/BaseSchema";
 
 @injectable()
 export class MongoORMRepository<DALEntity> {
@@ -39,9 +39,9 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
-    public async findByTwoKeys(k1: string, k2: string, v1:string|number|boolean, v2: string|number|boolean, model: BaseSchema): Promise<DALEntity> {
+    public async findByTwoKeys(queryElement: any, model: BaseSchema): Promise<DALEntity> {
         return await new Promise<DALEntity>((resolve, reject) => {
-            model.getModel().findOne({k1: v1, k2: v2})
+            model.getModel().findOne(queryElement)
             .then((res) => {
                 if (res) resolve(res);
                 else reject('document not found');
@@ -66,7 +66,7 @@ export class MongoORMRepository<DALEntity> {
 
     public async update(id: string, object: DALEntity, model: BaseSchema): Promise<DALEntity>{
         return await new Promise<DALEntity>((resolve, reject) => {
-            model.getModel().collection.findByIdAndUpdate(id, object)
+            model.getModel().findByIdAndUpdate(id, object, {new: true})
                 .then((res) => {
                     if (res) resolve(res);
                     else reject('document not found');

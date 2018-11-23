@@ -3,10 +3,10 @@ import { RepositoryImp } from "../base/RepositoryImp";
 import { DomianPointSystem } from "../../entities/DomainPointSystem";
 import { DALPointSystem } from "../../../infrastructure/entities/dal/DALPointSystem";
 import { PointSystemSchema } from "../../../infrastructure/entities/mongo/schemas/PointSystemSchema";
-import { PointsDataMapper } from '../../../infrastructure/dal/data_mapper/PointsDataMapper'
+import { PointsDataMapper } from '../../../infrastructure/data_mapper/PointsDataMapper'
 import { PointsRepository } from "./PointsRepository";
 import { TYPES } from "../../../infrastructure/types";
-import { MongoORMRepository } from "../../../infrastructure/dal/implementation/MongoORMRepository";
+import { MongoORMRepository } from "../../../infrastructure/implementation/MongoORMRepository";
 
 @injectable()
 export class PointsRepositoryImp extends RepositoryImp<DomianPointSystem, DALPointSystem> implements PointsRepository {

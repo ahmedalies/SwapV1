@@ -1,7 +1,7 @@
 import {injectable} from "inversify";
 import {EntityDataMapper} from "../interfaces/EntityDataMapper";
-import {DomainAdmin} from "../../../domain/entities/DomainAdmin";
-import {DALAdmin} from "../../entities/dal/DALAdmin";
+import {DomainAdmin} from "../../domain/entities/DomainAdmin";
+import {DALAdmin} from "../entities/dal/DALAdmin";
 
 @injectable()
 export class AdminDataMapper implements EntityDataMapper<DomainAdmin, DALAdmin> {

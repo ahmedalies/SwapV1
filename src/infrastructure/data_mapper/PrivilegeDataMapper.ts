@@ -1,6 +1,6 @@
 import {EntityDataMapper} from "../interfaces/EntityDataMapper";
-import {DomainControlPrivilege} from "../../../domain/entities/DomainControlPrivilege";
-import {DALControlPrivilege} from "../../entities/dal/DALControlPrivilege";
+import {DomainControlPrivilege} from "../../domain/entities/DomainControlPrivilege";
+import {DALControlPrivilege} from "../entities/dal/DALControlPrivilege";
 import {injectable} from "inversify";
 
 @injectable()

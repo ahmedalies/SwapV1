@@ -5,9 +5,9 @@ import {DALUserInterests} from "../../../infrastructure/entities/dal/DALUserInte
 import {UserInterestsRepository} from "./UserInterestsRepository";
 import {TYPES} from "../../../infrastructure/types";
 import {TYPES as DOMAIN_TYPES} from '../../types'
-import {MongoORMRepository} from "../../../infrastructure/dal/implementation/MongoORMRepository";
+import {MongoORMRepository} from "../../../infrastructure/implementation/MongoORMRepository";
 import {UserInterestSchema} from "../../../infrastructure/entities/mongo/schemas/UserInterestsSchema";
-import {UserInterestsDataMapper} from "../../../infrastructure/dal/data_mapper/UserInterestsDataMapper";
+import {UserInterestsDataMapper} from "../../../infrastructure/data_mapper/UserInterestsDataMapper";
 import {InterestsRepository} from "../interests/InterestsRepository";
 import {InterestsRepositoryImp} from "../interests/InterestsRepositoryImp";
 
