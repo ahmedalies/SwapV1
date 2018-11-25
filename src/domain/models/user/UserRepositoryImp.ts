@@ -53,6 +53,7 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
         this.userAuth = auth;
         this.userItem = userItem;
         this.swapRequest = swapRequest;
+        this.swapRequest.swapRequestCallback = this;
     }
 
     public async isUserExist(userId: string): Promise<string> {

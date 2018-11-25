@@ -4,14 +4,13 @@ import {DomainSwapRequest} from "../../entities/DomainSwapRequest";
 import {DALSwapRequest} from "../../../infrastructure/entities/dal/DALSwapRequest";
 import {SwapRequestRepository} from "./SwapRequestRepository";
 import {TYPES} from "../../../infrastructure/types";
-import {TYPES as DOMAIN_TYPES} from "./../../types"
+import {TYPES as DOMAIN_TYPES} from "../../types";
 import {MongoORMRepository} from "../../../infrastructure/implementation/MongoORMRepository";
 import {SwapRequestMapper} from "../../../infrastructure/data_mapper/SwapRequestMapper";
 import {SwapRequestSchema} from "../../../infrastructure/entities/mongo/schemas/SwapRequestSchema";
 import {UserItemRepository} from "../user_item/UserItemRepository";
 import {UserItemRepositoryImp} from "../user_item/UserItemRepositoryImp";
 import {SwapRequestCallback} from "./SwapRequestCallback";
-import {error} from "util";
 
 @injectable()
 export class SwapRequestRepositoryImp extends RepositoryImp<DomainSwapRequest, DALSwapRequest> implements SwapRequestRepository {
