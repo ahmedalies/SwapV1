@@ -1,6 +1,7 @@
 import { DALControlPrivilege } from "./DALControlPrivilege";
 
 export class DALAdmin {
+    id: number;
     _id: string;
     isLoggedIn: string;
     online: string;
@@ -8,5 +9,6 @@ export class DALAdmin {
     username: string;
     password: string;
     accessToken: string;
-    privileges: [];
+    uniqueAddedElement: any[];
+    //privileges: string[];
 }

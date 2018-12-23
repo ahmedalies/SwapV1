@@ -5,25 +5,41 @@ import {DALInterest} from "../../../infrastructure/entities/dal/DALInterest";
 import {TYPES} from "../../../infrastructure/types";
 import {inject, injectable} from "inversify";
 import {InterestDataMapper} from "../../../infrastructure/data_mapper/InterestDataMapper";
-import {MongoORMRepository} from "../../../infrastructure/implementation/MongoORMRepository";
 import {InterestSchema} from "../../../infrastructure/entities/mongo/schemas/InterestSchema";
-import {PrivilegeRepository} from "../privileges/PrivilegeRepository";
-import {TYPES as DOMAIN_TYPES} from "../../types";
+import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
+import { resolve } from "dns";
 
 @injectable()
 export class InterestsRepositoryImp extends RepositoryImp<DomainInterest, DALInterest> implements InterestsRepository {
 
     public constructor(
-        @inject(TYPES.ORMRepositoryForInterestEntity) repository: MongoORMRepository<DALInterest>,
+        @inject(TYPES.ORMRepositoryForInterestEntity) repository: ORMRepository<DALInterest>,
         @inject(TYPES.EntityDataMapperForInterests) dataMapper: InterestDataMapper,
         @inject(TYPES.InterestSchema) model: InterestSchema,
     ){
-        super(repository, dataMapper, model);
+        super(repository, dataMapper, ['interests']);
     }
 
     public async addInterest(interest: DomainInterest): Promise<DomainInterest> {
         return await new Promise<DomainInterest>((resolve, reject) => {
-            super.insert(interest)
+            super.createSHA1Hash(interest.name)
+                .then((res) => {
+                    super.insert(['_id', 'name', 'nameAR', 'created_by', 'image_url'],
+                     [res, interest.name, interest.nameAR, interest.created_by.id.toString(), interest.image_url])
+                        .then((res) => {
+                            resolve(res);
+                        }).catch((err) => {
+                            reject(err);
+                        });
+                }).catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    public async getInterest(id: string): Promise<DomainInterest> {
+        return await new Promise<DomainInterest>((resolve, reject) => {
+            super.findOne([], ['_id'], [id], 0)
                 .then((res) => {
                     resolve(res);
                 }).catch((err) => {
@@ -32,26 +48,25 @@ export class InterestsRepositoryImp extends RepositoryImp<DomainInterest, DALInt
         });
     }
 
-    public async getInterest(id: string): Promise<DomainInterest> {
-            let query = {_id: id};
-        return await new Promise<DomainInterest>((resolve, reject) => {
-            super.findByOneKey(query)
-                .then((res) => {
-                    resolve(res);
-                }).catch((err) => {
-                    reject(err);
-            });
+    public async getAllInterest(): Promise<DomainInterest[]> {
+        return await new Promise<DomainInterest[]>((resolve, reject) => {
+            super.findMany([], [], [], 0)
+            .then((res) => {
+                resolve(res);
+            }).catch((err) => {
+                reject(err);
+            })
         });
     }
 
     public async updateInterest(id: string, interest: DomainInterest): Promise<DomainInterest> {
         return await new Promise<DomainInterest>((resolve, reject) => {
-            super.update(id, interest)
+            super.update(['name', 'i_url'], [interest.name, interest.image_url], ['_id'], [id])
                 .then((res) => {
                     resolve(res);
                 }).catch((err) => {
-                reject(err);
-            });
+                    reject(err);
+                });
         });
     }
 
@@ -61,8 +76,8 @@ export class InterestsRepositoryImp extends RepositoryImp<DomainInterest, DALInt
                 .then((res) => {
                     resolve(res);
                 }).catch((err) => {
-                reject(err);
-            });
+                    reject(err);
+                });
         });
     }
 }

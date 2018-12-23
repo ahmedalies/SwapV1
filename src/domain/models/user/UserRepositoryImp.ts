@@ -23,42 +23,31 @@ import {DomainSwapRequest} from "../../entities/DomainSwapRequest";
 import {SwapRequestRepository} from "../swap_request/SwapRequestRepository";
 import {SwapRequestRepositoryImp} from "../swap_request/SwapRequestRepositoryImp";
 import {SwapRequestCallback} from "../swap_request/SwapRequestCallback";
+import {MysqlORMRepository} from "../../../infrastructure/implementation/MysqlORMRepository";
+import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
+import { DomainInterest } from "../../entities/DomainInterest";
+import { resolve } from "../../../../node_modules/@types/bluebird";
 
 @injectable()
 export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implements UserRepository, SwapRequestCallback {
 
-    userAuth: AuthRepository;
-    userInterests: UserInterestsRepository;
-    interest: InterestsRepository;
-    userItem: UserItemRepository;
-    swapRequest: SwapRequestRepository;
-    repository: MongoORMRepository<DALUser>;
-    model: UserSchema;
-
     constructor(
-        @inject(TYPES.ORMRepositoryForUserEntity) repository: MongoORMRepository<DALUser>,
-        @inject(TYPES.EntityDataMapperForUser) dataMapper: UserDataMapper,
-        @inject(TYPES.UserSchema) model: UserSchema,
-        @inject(DOMAIN_TYPES.UserInterestsRepository) userInterests: UserInterestsRepositoryImp,
-        @inject(DOMAIN_TYPES.InterestsRepository) interests: InterestsRepositoryImp,
-        @inject(DOMAIN_TYPES.AuthRepository) auth: AuthRepositoryImp,
-        @inject(DOMAIN_TYPES.UserItemRepository) userItem: UserItemRepositoryImp,
-        @inject(DOMAIN_TYPES.SwapRequestRepository) swapRequest: SwapRequestRepositoryImp
+        @inject(TYPES.ORMRepositoryForUserEntity) private repository: ORMRepository<DALUser>,
+        @inject(TYPES.EntityDataMapperForUser) private dataMapper: UserDataMapper,
+        @inject(TYPES.UserSchema) private model: UserSchema,
+        @inject(DOMAIN_TYPES.UserInterestsRepository) private userInterests: UserInterestsRepositoryImp,
+        @inject(DOMAIN_TYPES.InterestsRepository) private interests: InterestsRepositoryImp,
+        @inject(DOMAIN_TYPES.AuthRepository) private userAuth: AuthRepositoryImp,
+        @inject(DOMAIN_TYPES.UserItemRepository) private userItem: UserItemRepositoryImp,
+        @inject(DOMAIN_TYPES.SwapRequestRepository) private swapRequest: SwapRequestRepositoryImp
     ){
-        super(repository, dataMapper, model);
-        this.repository = repository;
-        this.model = model;
-        this.userInterests = userInterests;
-        this.interest = interests;
-        this.userAuth = auth;
-        this.userItem = userItem;
-        this.swapRequest = swapRequest;
+        super(repository, dataMapper, ['users']);
         this.swapRequest.swapRequestCallback = this;
     }
 
     public async isUserExist(userId: string): Promise<string> {
         return await new Promise<string>((resolve, reject) => {
-            super.findByOneKey({_id: userId})
+            super.findOne([], ['_id'], [userId], 0)
                 .then((res) => {
                     resolve(res._id)
                 }).catch((err) => {
@@ -67,11 +56,15 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
         })
     }
 
-    public async getUser(userId: string): Promise<DomainUser> {
+    public async getUser(accessToken: string | number): Promise<DomainUser> {
         return await new Promise<DomainUser>((resolve, reject) => {
-            super.findByOneKey({_id: userId})
+            this.repository.findOne(['users.*', 'userstatus.status as statusString',
+                     'usertype.type as typeString'],
+                     ['accessToken', 'users.status', 'users.userType'],
+                     [accessToken.toString(), 'userstatus.id', 'usertype.id'], 1, 
+                     ['users', 'userstatus', 'usertype'])
                 .then((res) => {
-                    resolve(res);
+                    resolve(this.dataMapper.toDomain(res));
                 }).catch((err) => {
                     reject(err);
                 });
@@ -80,8 +73,9 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
 
     public async isUserOngoing(userId: string): Promise<boolean> {
         return await new Promise<boolean>((resolve, reject) => {
-            super.findByOneKey({_id: userId})
+            super.findOne([], ['_id'], [userId], 0)
                 .then((res) => {
+                    //console.log(res);
                     if (res.status === 'ongoing') resolve(true);
                     else reject('user is blocked for rate')
                 }).catch((err) => {
@@ -90,11 +84,23 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
         });
     }
 
-    public async addInterests(object: DomainUserInterests): Promise<DomainUserInterests> {
-        return await new Promise<DomainUserInterests>((resolve, reject) => {
-            this.isUserExist(object.userId)
+    public async isValidAccessToken(accessToken: string): Promise<boolean> {
+        return await new Promise<boolean>((resolve, reject) => {
+            super.findOne([], ['accessToken'], [accessToken], 0)
                 .then((res) => {
-                    object.userId = res;
+                    if (res.isValidToken) resolve(true);
+                    else reject('session expired')
+                }).catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    public async addInterests(object: DomainUserInterests, accessToken: string): Promise<DomainUserInterests> {
+        return await new Promise<DomainUserInterests>((resolve, reject) => {
+            this.getUser(accessToken)
+                .then((res) => {
+                    object.userId = res.id;
                     this.userInterests.add(object)
                         .then((res) => {
                             resolve(res);
@@ -103,16 +109,16 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
                         });
                 }).catch((err) => {
                     reject(err);
-                    });
+                });
         });
 
     }
 
-    public async getInterests(userId: string): Promise<DomainUserInterests> {
+    public async getInterests(accessToken: string): Promise<DomainUserInterests> {
         return await new Promise<DomainUserInterests>((resolve, reject) => {
-            this.isUserExist(userId)
+            this.getUser(accessToken)
                 .then((res) => {
-                    this.userInterests.get(res)
+                    this.userInterests.get(res.id)
                         .then((res) => {
                             resolve(res)
                         }).catch((err) => {
@@ -121,7 +127,17 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
                 }).catch((err) => {
                     reject(err)
                 });
+        });
+    }
 
+    public async getAllInterests(): Promise<DomainInterest[]> {
+        return await new Promise<DomainInterest[]>((resolve, reject) => {
+            this.interests.getAllInterest()
+                .then((res) => {
+                    resolve(res)
+                }).catch((err) => {
+                    reject(err)
+                });
         });
     }
 
@@ -157,37 +173,37 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
         });
     }
 
-    public async addItem(object: DomainItem): Promise<DomainItem> {
+    public async addItem(object: DomainItem, accessToken: string): Promise<DomainItem> {
         return await new Promise<DomainItem>((resolve, reject) => {
-            this.isUserExist(object.owner._id)
-                .then((res) => {
-                    object.owner._id = res;
-                    this.interest.getInterest(object.category._id)
-                        .then((res) => {
-                        object.category._id = res._id;
-                            this.userItem.addItem(object)
-                                .then((item) => {
-                                    this.getUser(object.owner._id)
-                                        .then((res) => {
-                                            item.owner = res;
-                                            item.owner.password = null;
-                                            this.interest.getInterest(item.category._id)
-                                                .then((res) => {
-                                                    item.category = res;
-                                                    item.category.created_by = null;
-                                                    resolve(item);
-                                                }).catch((err) => {
-                                                    reject(err);
-                                                });
-                                        }).catch((err) => {
-                                            reject(err);
-                                        });
-                                }).catch((err) => {
-                                    reject(err);
-                                })
-                        }).catch((err) => {
-                            reject(err);
-                        });
+            this.getUser(accessToken)
+                .then((user) => {
+                    //console.log(user)
+                    if (user.statusString === 'ongoing'){
+                        object.owner = user;
+                        this.interests.getInterest(object.category._id)
+                            .then((res) => {
+                            object.category.id = res.id;
+                                this.userItem.addItem(object)
+                                    .then((item) => {
+                                        item.owner = user;
+                                        item.owner.password = null;
+                                        this.interests.getInterest(object.category._id)
+                                            .then((res) => {
+                                                item.category = res;
+                                                //item.category.created_by = null;
+                                                resolve(item);
+                                            }).catch((err) => {
+                                                reject(err);
+                                            });
+                                    }).catch((err) => {
+                                        reject(err);
+                                    })
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                    } else {
+                        reject('user is blocked for rate');
+                    }
                 }).catch((err) => {
                     reject(err);
                 });
@@ -199,7 +215,7 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
             this.isUserExist(object.owner._id)
                 .then((res) => {
                     object.owner._id = res;
-                    this.userItem.update(itemId, object)
+                    this.userItem.update([], [], [], [])
                         .then((res) => {
                             resolve(res);
                         }).catch((err) => {
@@ -259,74 +275,93 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
         });
     }
 
-    public async ask(object: DomainSwapRequest): Promise<DomainSwapRequest> {
+    public async ask(object: DomainSwapRequest, accessToken: string): Promise<DomainSwapRequest> {
         return await new Promise<DomainSwapRequest>((resolve, reject) => {
-            this.isFromIndividualToBusiness(object.senderItem.owner._id, object.receiverItem.owner._id)
-                .then((res) => {
-                    if (res) {
-                        reject('permission denied');
+            this.getUser(accessToken)
+            .then((senderUser) => {
+                this.userItem.getOneItem(object.senderItem._id)
+                .then((senderItem) => {
+                    if(senderUser._id === senderItem.owner._id){
+                        this.userItem.getOneItem(object.receiverItem._id)
+                        .then((receiverItem) => {
+                            if(senderUser.typeString === 'individual' 
+                                && receiverItem.owner.typeString === 'business'){
+                                    reject('permission denied, can\'t send request due to system policy')
+                            } else {
+                                senderItem.owner = senderUser;
+                                object.senderItem = senderItem
+                                object.receiverItem = receiverItem
+                                this.swapRequest.ask(object)
+                                .then((respond) => {
+                                    resolve(respond)
+                                }).catch((err) => {
+                                    reject(err)
+                                });
+                            }
+                        }).catch((err) => {
+                            if(err === 'document not found')
+                                reject('invalid receiverItem');
+                            else 
+                                reject(err)
+                        })
                     } else {
-                        this.swapRequest.ask(object)
-                            .then((request) => {
-                                this.getUser(object.senderItem.owner._id)
-                                    .then((res) => {
-                                        res.password = null;
-                                        request.senderItem.owner = res;
-                                        this.interest.getInterest(request.senderItem.category._id)
-                                            .then((res) => {
-                                                res.created_by = null;
-                                                request.senderItem.category = res;
-                                                this.getUser(request.receiverItem.owner._id)
-                                                    .then((res) => {
-                                                        res.password = null;
-                                                        request.receiverItem.owner = res;
-                                                        this.interest.getInterest(request.receiverItem.category._id)
-                                                            .then((res) => {
-                                                                res.created_by = null;
-                                                                request.receiverItem.category = res;
-                                                                resolve(request);
-                                                            }).catch((err) => {
-                                                                reject(err);
-                                                            });
-                                                    }).catch((err) => {
-                                                        reject(err);
-                                                    });
-                                            }).catch((err) => {
-                                                reject(err);
-                                            });
-                                    }).catch((err) => {
-                                        reject(err);
-                                    });
-                            }).catch((err) => {
-                                reject(err);
-                            });
+                        reject(senderUser.name + ' does not own this item ' + senderItem.name)
                     }
                 }).catch((err) => {
-                    reject(err);
-                });
+                    if(err === 'document not found')
+                        reject('invalid senderItem');
+                    else 
+                        reject(err)
+                })
+            }).catch((err) => {
+                if(err === 'document not found')
+                    reject('invalid access token');
+                else 
+                    reject(err)
+            })
         });
     }
 
-    public async accept(userId: string, swapId: string): Promise<boolean> {
+    public async accept(accessToken: string, swapId: string): Promise<boolean> {
         return await new Promise<boolean>((resolve, reject) => {
-
+            this.getUser(accessToken)
+            .then((user) => {
+                this.swapRequest.accept(swapId, user._id)
+                .then((res) => {
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err)
+                })
+            }).catch((err) => {
+                reject(err)
+            })
         });
     }
 
-    public async reject(userId: string, swapId: string, reason: string): Promise<boolean> {
+    public async reject(accessToken: string, swapId: string, reason: string): Promise<boolean> {
         return await new Promise<boolean>((resolve, reject) => {
-
+            this.getUser(accessToken)
+            .then((user) => {
+                this.swapRequest.reject(swapId, user._id, null)
+                .then((res) => {
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err)
+                })
+            }).catch((err) => {
+                reject(err)
+            })
         });
     }
 
     public async isFromIndividualToBusiness(senderId: string, receiverId: string): Promise<boolean> {
         return await new Promise<boolean>((resolve, reject) => {
-            super.findByOneKey({_id: senderId})
+            super.findOne([], ['_id'], [senderId], 0)
                 .then((res) => {
-                    if (res.userType === 'individual') {
-                        super.findByOneKey({_id: receiverId})
+                    if (res.typeString === 'individual') {
+                        super.findOne([], ['_id'], [receiverId], 0)
                             .then((res) => {
-                                if (res.userType === 'business'){
+                                if (res.typeString === 'business'){
                                     resolve(true);
                                 } else {
                                     resolve(false);
@@ -348,7 +383,7 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
             this.getUser(senderUserId)
                 .then((res) => {
                     res.status = 'blocked for rate';
-                    this.update(res._id, res);
+                    super.update([], [], [], []);
                 }).catch((err) => {
                     console.log(err);
                 });
@@ -357,7 +392,7 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
             this.getUser(senderUserId)
                 .then((res) => {
                     res.status = 'blocked for rate';
-                    this.update(res._id, res);
+                    this.update([], [], [], []);
                 }).catch((err) => {
                     console.log(err);
                 });

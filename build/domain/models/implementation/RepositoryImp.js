@@ -41,7 +41,7 @@ let RepositoryImp = class RepositoryImp {
     }
     findByTwoKeys(k1, k2, v1, v2) {
         return __awaiter(this, void 0, void 0, function* () {
-            const p = yield this._repository.findByTwoKeys(k1, k2, v1, v2, this._model)
+            const p = yield this._repository.findByTwoKeysWithQuery(k1, k2, v1, v2, this._model)
                 .then((user) => {
                 return Promise.resolve(this._dataMapper.toDomain(user));
             }).catch((err) => {

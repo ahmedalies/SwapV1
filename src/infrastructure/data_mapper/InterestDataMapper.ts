@@ -8,21 +8,25 @@ export class InterestDataMapper implements EntityDataMapper<DomainInterest, DALI
 
     toDAL(domainObject: DomainInterest): DALInterest {
         let interest = new DALInterest();
+        interest.id = domainObject.id;
         interest._id = domainObject._id;
-        interest.created_at = domainObject.created_at;
+        //interest.created_at = domainObject.created_at;
         interest.image_url = domainObject.image_url;
         interest.name = domainObject.name;
-        interest.created_by = domainObject.created_by;
+        interest.nameAR = domainObject.nameAR;
+        //interest.created_by = domainObject.created_by;
         return interest;
     }
 
     toDomain(dalObject: DALInterest): DomainInterest {
         let interest = new DomainInterest();
+        interest.id = dalObject.id;
+        interest._id = dalObject._id;
         interest.name = dalObject.name;
         interest.image_url = dalObject.image_url;
         interest.created_at = dalObject.created_at;
-        interest._id = dalObject._id;
-        interest.created_by = dalObject.created_by;
+        interest.nameAR = dalObject.nameAR;
+        //interest.created_by = dalObject.created_by;
         return interest;
     }
 }

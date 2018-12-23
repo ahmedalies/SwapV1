@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {BaseSchema} from "./BaseSchema";
+import {BaseSchema} from "../../../interfaces/BaseSchema";
 import {model, Schema} from "mongoose";
 import * as uniqueValidator from 'mongoose-unique-validator'
 

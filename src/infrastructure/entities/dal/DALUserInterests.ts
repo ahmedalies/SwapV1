@@ -1,6 +1,7 @@
 
 export class DALUserInterests {
     _id: string;
-    userId: string;
-    interests: any[]
+    userId: string | number;
+    interests: any[];
+    uniqueAddedElement: any[]
 }

@@ -11,7 +11,9 @@ exports.TYPES = {
     UserRepository: Symbol.for('UserRepository'),
     UserItemRepository: Symbol.for('UserItemRepository'),
     SwapRequestRepository: Symbol.for('SwapRequestRepository'),
+    AdminPrivilegeRepository: Symbol.for('AdminPrivilegeRepository'),
     //services
+    AuthService: Symbol.for('AuthService'),
     UserInterestService: Symbol.for('UserInterestService'),
     UserItemService: Symbol.for('UserItemService'),
     SwapRequestService: Symbol.for('SwapRequestService'),

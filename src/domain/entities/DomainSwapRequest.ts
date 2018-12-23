@@ -10,5 +10,6 @@ export class DomainSwapRequest {
     senderItem: DomainItem;
     receiverItem: DomainItem;
     createdAt: number|string;
-    message: string
+    message: string;
+    swapStatusString: String;
 }

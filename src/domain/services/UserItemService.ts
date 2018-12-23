@@ -9,33 +9,39 @@ import {DomainUser} from "../entities/DomainUser";
 export class UserItemService {
     constructor(@inject(TYPES.UserRepository) private repository: UserRepository){}
 
-    public async addItem(object: any): Promise<DomainItem>{
+    public async addItem(body: any, headers: any): Promise<DomainItem>{
         let item: DomainItem = new DomainItem();
 
-        if (object.owner){item.owner = new DomainUser(); item.owner._id = object.owner}
-        else {return Promise.reject('owner field does\'t exist')}
+        // if (body.owner){item.owner = new DomainUser(); item.owner._id = body.owner}
+        // else {return Promise.reject('owner field does\'t exist')}
 
-        if (object.name){item.name = object.name}
+        if (body.name){item.name = body.name}
         else {return Promise.reject('user_item name field does\'t exist')}
 
-        if (object.description){item.description = object.description}
+        if (body.description){item.description = body.description}
         else {return Promise.reject('user_item description field does\'t exist')}
 
-        if (object.category){ item.category= new DomainInterest(); item.category._id = object.category;}
+        if (body.category){ item.category= new DomainInterest(); item.category._id = body.category;}
         else {return Promise.reject('user_item category field does\'t exist')}
 
         return await new Promise<DomainItem>((resolve, reject) => {
-            this.repository.isUserOngoing(item.owner._id)
+            if (headers && headers['access-token']) {
+                this.repository.isValidAccessToken(headers['access-token'])
                 .then((res) => {
-                    this.repository.addItem(item)
-                        .then((res) => {
-                            resolve(res);
-                        }).catch((err) => {
-                            reject(err);
-                        });
+                    if(res){
+                        this.repository.addItem(item, headers['access-token'])
+                            .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                    } else {
+                        reject('session expired'); 
+                    }
                 }).catch((err) => {
-                    reject(err);
-                });
+                    reject('session expired or invalid access token, try login');
+                })
+            } else {return Promise.reject('access denied')}
         });
     }
 }

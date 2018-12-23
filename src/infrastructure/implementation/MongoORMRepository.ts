@@ -1,10 +1,10 @@
 import { injectable } from "inversify";
-import { BaseSchema } from "../entities/mongo/schemas/BaseSchema";
+import { BaseSchema } from "../interfaces/BaseSchema";
 
 @injectable()
-export class MongoORMRepository<DALEntity> {
-    public async findByOneKey(queryElement: any, model: BaseSchema): Promise<DALEntity> {
-        return await new Promise<DALEntity>((resolve, reject) => {
+export class MongoORMRepository {
+    public async findByOneKey(queryElement: any, model: BaseSchema): Promise<any> {
+        return await new Promise<any>((resolve, reject) => {
             model.getModel().findOne(queryElement)
                 .then((res) => {
                     if (res) resolve(res);
@@ -15,8 +15,8 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
-    public async findAll(model: BaseSchema): Promise<[DALEntity]> {
-        return await new Promise<[DALEntity]>((resolve, reject) => {
+    public async findAll(model: BaseSchema): Promise<[any]> {
+        return await new Promise<[any]>((resolve, reject) => {
             model.getModel().find({})
                 .then((res) => {
                     if (res) resolve(res);
@@ -27,8 +27,8 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
-    public async findAllByOneKey(query: any, model: BaseSchema): Promise<DALEntity[]> {
-        return await new Promise<DALEntity[]>((resolve, reject) => {
+    public async findAllByOneKey(query: any, model: BaseSchema): Promise<any[]> {
+        return await new Promise<any[]>((resolve, reject) => {
             model.getModel().find({query})
                 .then((res) => {
                     if (res) resolve(res);
@@ -39,8 +39,8 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
-    public async findByTwoKeys(queryElement: any, model: BaseSchema): Promise<DALEntity> {
-        return await new Promise<DALEntity>((resolve, reject) => {
+    public async findByTwoKeys(queryElement: any, model: BaseSchema): Promise<any> {
+        return await new Promise<any>((resolve, reject) => {
             model.getModel().findOne(queryElement)
             .then((res) => {
                 if (res) resolve(res);
@@ -52,8 +52,8 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
-    public async insert(data: DALEntity, model: BaseSchema): Promise<DALEntity> {
-        return await new Promise<DALEntity>((resolve, reject) => {
+    public async insert(data: any, model: BaseSchema): Promise<any> {
+        return await new Promise<any>((resolve, reject) => {
             model.getModel().collection.insertOne(data)
                 .then((res) => {
                     resolve(res.ops[0]);
@@ -64,8 +64,8 @@ export class MongoORMRepository<DALEntity> {
         });
     }
 
-    public async update(id: string, object: DALEntity, model: BaseSchema): Promise<DALEntity>{
-        return await new Promise<DALEntity>((resolve, reject) => {
+    public async update(id: string, object: any, model: BaseSchema): Promise<any>{
+        return await new Promise<any>((resolve, reject) => {
             model.getModel().findByIdAndUpdate(id, object, {new: true})
                 .then((res) => {
                     if (res) resolve(res);

@@ -10,60 +10,123 @@ import {UserInterestSchema} from "../../../infrastructure/entities/mongo/schemas
 import {UserInterestsDataMapper} from "../../../infrastructure/data_mapper/UserInterestsDataMapper";
 import {InterestsRepository} from "../interests/InterestsRepository";
 import {InterestsRepositoryImp} from "../interests/InterestsRepositoryImp";
+import {MysqlORMRepository} from "../../../infrastructure/implementation/MysqlORMRepository";
+import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
+import { resolve } from "path";
+import { DomainInterest } from "../../entities/DomainInterest";
 
 
 
 @injectable()
 export class UserInterestsRepositoryImp extends RepositoryImp<DomainUserInterests, DALUserInterests> implements UserInterestsRepository {
 
-    interests: InterestsRepository;
-
     constructor(
-        @inject(TYPES.ORMRepositoryForUserInterestsEntity) repository: MongoORMRepository<DALUserInterests>,
-        @inject(TYPES.EntityDataMapperForUserInterests) dataMapper: UserInterestsDataMapper,
-        @inject(TYPES.UserInterestSchema) model: UserInterestSchema,
-        @inject(DOMAIN_TYPES.InterestsRepository) interests: InterestsRepositoryImp
+        @inject(TYPES.ORMRepositoryForUserInterestsEntity) private repository: ORMRepository<DALUserInterests>,
+        @inject(TYPES.EntityDataMapperForUserInterests) private dataMapper: UserInterestsDataMapper,
+        @inject(TYPES.UserInterestSchema) private model: UserInterestSchema,
+        @inject(DOMAIN_TYPES.InterestsRepository) private interests: InterestsRepositoryImp
     ) {
-        super(repository, dataMapper, model);
-        this.interests = interests;
+        super(repository, dataMapper, ['userinterests']);
     }
 
     public async add(object: DomainUserInterests): Promise<DomainUserInterests> {
         return await new Promise<DomainUserInterests>((resolve, reject) => {
-            let newInterests = [];
-            let counter = 0;
-
+            let message: string[] = [], result: any = null, newInterest: DomainInterest[] = [], iCount = 0;
             object.interests.forEach((x) => {
-               this.interests.findByOneKey({_id: x})
+               this.interests.findOne([], ['_id'], [x._id], 0)
                    .then((res) => {
-                       newInterests.push({interest: res._id, created_at: Date.now()});
-                       counter++;
-                       if (counter === object.interests.length){
-                           object.interests = newInterests;
-                           super.insert(object)
-                               .then((res) => {
-                                   resolve(res)
-                               }).catch((err) => {
-                               reject(err)
-                           });
-                       }
+                       super.findOne([],['userId', 'interestId'],
+                       [object.userId.toString(), res.id.toString()], 0)
+                       .then((e) => {
+                            iCount++
+                            if (e){
+                                message.push('this user already subscribe for ' + res.name)
+                                if(iCount === object.interests.length){
+                                    if (newInterest.length) { 
+                                        let sql = 'insert into userinterests (userId, interestId) values ';
+                                        let count = 0
+                                        let values = ''
+                                        newInterest.forEach((x) => {
+                                            count++
+                                            if (count === newInterest.length){
+                                                values = '(' + object.userId + ', ' + x.id + ')'
+                                            } else {
+                                                values = '(' + object.userId + ', ' + x.id + '),'
+                                            }
+                                            
+                                            sql = sql + values;
+                                        })
+                                        this.repository.perform(sql)
+                                        .then((result) => {
+                                            object.interests = newInterest
+                                            resolve(object)
+                                        }).catch((err) => {
+                                            reject(err)
+                                        })
+                                    } else {
+                                        reject(message)
+                                    }
+                                }
+                            }
+                       }).catch((err) => {
+                           iCount++
+                            if (err === 'document not found'){
+                                newInterest.push(res)
+                                if(iCount === object.interests.length){
+                                    if (newInterest.length) {
+                                        let sql = 'insert into userinterests (userId, interestId) values ';
+                                        let count = 0
+                                        let values = ''
+                                        newInterest.forEach((x) => {
+                                            count++
+                                            if (count === newInterest.length){
+                                                values = '(' + object.userId + ', ' + x.id + ')'
+                                            } else {
+                                                values = '(' + object.userId + ', ' + x.id + '),'
+                                            }
+                                            
+                                            sql = sql + values;
+                                        })
+                                        this.repository.perform(sql)
+                                        .then((result) => {
+                                            object.interests = newInterest
+                                            resolve(object)
+                                        }).catch((err) => {
+                                            reject(err)
+                                        })
+                                    }
+                                }
+                            } else {
+                                message.push(err)
+                            }
+                       });
                    }).catch((err) => {
-                       reject('insufficient interestId');
+                        message.push('insufficient interestId')
                    });
             });
         })
     }
 
-    public async get(userId: string): Promise<DomainUserInterests> {
-        return await super.findByOneKey({userId: userId});
+    public async get(userId: number): Promise<DomainUserInterests> {
+        return await new Promise<DomainUserInterests>((resolve, reject) => {
+            this.repository.findOne(['userinterests.*', 'interests.name', 'interests.image_url', 
+            'interests.id as iId', 'interests._id as i_id'], 
+            ['userinterests.userId', 'userinterests.interestId'], [userId.toString(), 'interests.id'], 1, 
+            ['userinterests', 'interests'])
+            .then((res) => {
+                resolve(this.dataMapper.toDomain(res));
+            }).catch((err) => {
+                reject(err);
+            });
+        });
     }
 
     public async removeOne(interestId: string, userId: string): Promise<boolean> {
         return await new Promise<boolean>((resolve, reject) => {
             super.findByOneKey({userId: userId})
                 .then((res) => {
-                    res.interests.splice(res.interests.findIndex(x => x.interest === interestId), 1);
-                    super.update(res._id, res)
+                    res.interests.splice(res.interests.findIndex(x => x.interests === interestId), 1);
+                    super.update([], [], [], [])
                         .then((res) => {
                             resolve(true);
                         }).catch((err) => {

@@ -10,6 +10,7 @@ export interface AdminRepository extends Repository<DomainAdmin> {
     //privilege functions
     hasPrivilege(adminId, privilege: string): Promise<DomainAdmin>;
     getPrivilege(privilegeName: string): Promise<DomainControlPrivilege>;
+    assingAdminPrivilege(creatorId: string, adminId: string, privilegeName: string): Promise<DomainAdmin>
 
     //admin functions
     createAdmin(creatorId: string, admin: DomainAdmin): Promise<DomainAdmin>;

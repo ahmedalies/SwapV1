@@ -5,7 +5,8 @@ export class DALSwapRequest {
     receiver_rate: number;
     respond_at: string | number;
     milli24h: number;
-    sender_item: string;
-    receiver_item: string;
+    sender_item: number;
+    receiver_item: number;
+    swapStatusString: string;
     created_at: string | number;
 }

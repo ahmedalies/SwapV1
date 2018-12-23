@@ -16,10 +16,11 @@ export class SwapRequestMapper implements EntityDataMapper<DomainSwapRequest, DA
         request.status = dalObject.status;
         request.milliSecondAfter24Hours = dalObject.milli24h;
         request.senderItem = new DomainItem();
-        request.senderItem._id = dalObject.sender_item;
+        request.senderItem.id = dalObject.sender_item;
         request.receiverItem = new DomainItem();
-        request.receiverItem._id = dalObject.receiver_item;
+        request.receiverItem.id = dalObject.receiver_item;
         request.createdAt = dalObject.created_at;
+        request.swapStatusString = dalObject.swapStatusString;
         return request;
     }
 
@@ -31,8 +32,8 @@ export class SwapRequestMapper implements EntityDataMapper<DomainSwapRequest, DA
         request.respond_at = domainObject.respondAt;
         request.status = domainObject.status;
         request.milli24h = domainObject.milliSecondAfter24Hours;
-        request.sender_item = domainObject.senderItem._id;
-        request.receiver_item = domainObject.receiverItem._id;
+        request.sender_item = domainObject.senderItem.id;
+        request.receiver_item = domainObject.receiverItem.id;
         request.created_at = domainObject.createdAt;
         return request;
     }

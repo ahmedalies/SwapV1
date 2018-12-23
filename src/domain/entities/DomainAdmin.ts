@@ -1,6 +1,7 @@
 import { DomainControlPrivilege } from "./DomainControlPrivilege";
 
 export class DomainAdmin {
+    id: number;
     _id: string;
     isLoggedIn: string;
     online: string;
@@ -8,5 +9,5 @@ export class DomainAdmin {
     username: string;
     password: string;
     accessToken: string;
-    privileges: [];
+    privileges: DomainControlPrivilege[];
 }

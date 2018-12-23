@@ -1,4 +1,4 @@
-import {controller, httpPost, interfaces, request, response} from "inversify-express-utils";
+import {controller, httpPost, interfaces, request, response, httpGet} from "inversify-express-utils";
 import {TYPES} from "../domain/types";
 import {inject} from "inversify";
 import {Request, Response} from "express";
@@ -11,9 +11,29 @@ export class UserInterestContoller implements interfaces.Controller {
 
     @httpPost('/add')
     public async add(@request() req: Request, @response() res: Response){
-        await this.service.addInterest(req.body)
+        await this.service.addInterest(req.body, req.headers)
             .then((r) => {
-                res.status(200).send({message: r, error: false});
+                res.status(200).send({response: r, error: false});
+            }).catch((err) => {
+                res.status(200).send({message: err, error: true});
+            });
+    }
+
+    @httpGet('/:userId')
+    public async getUserInterests(@request() req: Request, @response() res: Response){
+        await this.service.getUserInterests(req.params, req.headers)
+            .then((r) => {
+                res.status(200).send({response: r, error: false});
+            }).catch((err) => {
+                res.status(200).send({message: err, error: true});
+            });
+    }
+
+    @httpGet('/')
+    private async getAll(@request() req: Request, @response() res: Response){
+        await this.service.getAllInterests(req.headers)
+            .then((r) => {
+                res.status(200).send({interests: r, error: false});
             }).catch((err) => {
                 res.status(200).send({message: err, error: true});
             });

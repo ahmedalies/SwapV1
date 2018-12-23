@@ -1,0 +1,1123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="83e8d940-604a-4d13-a46d-1410a50a33d6" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/domain/entities/DomainAdminPrivilege.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeRepository.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeRepositoryImp.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/domain/services/AuthService.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/infrastructure/data_mapper/AdminPrivilegeDataMapper.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdminPrivilege.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/infrastructure/implementation/MysqlHelper.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/infrastructure/implementation/ORMRepository.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/mongoSettings.xml" afterPath="$PROJECT_DIR$/.idea/mongoSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/configuration.js" afterPath="$PROJECT_DIR$/build/configuration.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/configuration.js.map" afterPath="$PROJECT_DIR$/build/configuration.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/controller/AuthController.js" afterPath="$PROJECT_DIR$/build/controller/AuthController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/controller/AuthController.js.map" afterPath="$PROJECT_DIR$/build/controller/AuthController.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/entities/DomainUser.js.map" afterPath="$PROJECT_DIR$/build/domain/entities/DomainUser.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/models/implementation/AuthRepositoryImp.js" afterPath="$PROJECT_DIR$/build/domain/models/implementation/AuthRepositoryImp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/models/implementation/RepositoryImp.js" afterPath="$PROJECT_DIR$/build/domain/models/implementation/RepositoryImp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/models/implementation/auth/AuthRepositoryImp.js" afterPath="$PROJECT_DIR$/build/domain/models/implementation/auth/AuthRepositoryImp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/models/implementation/points/PointsRepositoryImp.js" afterPath="$PROJECT_DIR$/build/domain/models/implementation/points/PointsRepositoryImp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/types.js" afterPath="$PROJECT_DIR$/build/domain/types.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/domain/types.js.map" afterPath="$PROJECT_DIR$/build/domain/types.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/server.js" afterPath="$PROJECT_DIR$/build/server.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/server.js.map" afterPath="$PROJECT_DIR$/build/server.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/.yarn-integrity" afterPath="$PROJECT_DIR$/node_modules/.yarn-integrity" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/LICENSE" afterPath="$PROJECT_DIR$/node_modules/bluebird/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/README.md" afterPath="$PROJECT_DIR$/node_modules/bluebird/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.core.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.core.min.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.core.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.min.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/browser/bluebird.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/release/async.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/release/async.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/release/debuggability.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/release/debuggability.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/release/promise.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/release/promise.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/js/release/util.js" afterPath="$PROJECT_DIR$/node_modules/bluebird/js/release/util.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bluebird/package.json" afterPath="$PROJECT_DIR$/node_modules/bluebird/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/configuration.ts" afterPath="$PROJECT_DIR$/src/configuration.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/controller/AuthController.ts" afterPath="$PROJECT_DIR$/src/controller/AuthController.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/entities/DomainAdmin.ts" afterPath="$PROJECT_DIR$/src/domain/entities/DomainAdmin.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/entities/DomainUser.ts" afterPath="$PROJECT_DIR$/src/domain/entities/DomainUser.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/admin/AdminRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/admin/AdminRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/auth/AuthRepository.ts" afterPath="$PROJECT_DIR$/src/domain/models/auth/AuthRepository.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/auth/AuthRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/auth/AuthRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/base/Repository.ts" afterPath="$PROJECT_DIR$/src/domain/models/base/Repository.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/base/RepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/base/RepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/interests/InterestsRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/interests/InterestsRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/points/PointsRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/points/PointsRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/privileges/PrivilegeRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/privileges/PrivilegeRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/swap_request/SwapRequestRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/swap_request/SwapRequestRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/user/UserRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/user/UserRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/user_interests/UserInterestsRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/user_interests/UserInterestsRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/models/user_item/UserItemRepositoryImp.ts" afterPath="$PROJECT_DIR$/src/domain/models/user_item/UserItemRepositoryImp.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/domain/types.ts" afterPath="$PROJECT_DIR$/src/domain/types.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/data_mapper/UserDataMapper.ts" afterPath="$PROJECT_DIR$/src/infrastructure/data_mapper/UserDataMapper.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdmin.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdmin.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/dal/DALUser.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/dal/DALUser.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/AdminSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/AdminSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/BusinessUserSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/BusinessUserSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ConfigurationCreationSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ConfigurationCreationSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ControlPrivilegeSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ControlPrivilegeSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/InterestSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/InterestSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ItemSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ItemSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/PointLogSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/PointLogSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/PointSystemSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/PointSystemSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/SubPointSystemSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/SubPointSystemSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/SwapRequestSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/SwapRequestSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/UserInterestsSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/UserInterestsSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/UserSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/UserSchema.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/implementation/MongoORMRepository.ts" afterPath="$PROJECT_DIR$/src/infrastructure/implementation/MongoORMRepository.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/implementation/MysqlORMRepository.ts" afterPath="$PROJECT_DIR$/src/infrastructure/implementation/MysqlORMRepository.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/infrastructure/types.ts" afterPath="$PROJECT_DIR$/src/infrastructure/types.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server.ts" afterPath="$PROJECT_DIR$/src/server.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yarn.lock" afterPath="$PROJECT_DIR$/yarn.lock" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/BaseSchema.ts" afterPath="$PROJECT_DIR$/src/infrastructure/interfaces/BaseSchema.ts" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="AdminRepositoryImp.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/domain/models/admin/AdminRepositoryImp.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="398">
+              <caret line="51" column="49" lean-forward="true" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
+              <folding>
+                <element signature="n#!!block;n#getAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#updateAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#removeAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#getPrivilege#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#getInnerAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#addInterest#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#getInterest#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#updateInterest#0;n#AdminRepositoryImp#0" expanded="false" />
+                <element signature="n#!!block;n#removeInterests#0;n#AdminRepositoryImp#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>console</find>
+      <find>set</find>
+      <find>then</find>
+      <find>onboo</find>
+      <find>isuserbl</find>
+      <find>isuseron</find>
+      <find>DALEntity</find>
+      <find>sh</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>any</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/infrastructure/data_mapper/SwapRequestMapper.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/SwapRequestSchema.ts" />
+        <option value="$PROJECT_DIR$/src/configuration.ts" />
+        <option value="$PROJECT_DIR$/src/domain/services/UserItemService.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/dal/DALSwapRequest.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/dal/DALItem.ts" />
+        <option value="$PROJECT_DIR$/src/domain/services/SwapRequestService.ts" />
+        <option value="$PROJECT_DIR$/src/controller/SwapRequestContoller.ts" />
+        <option value="$PROJECT_DIR$/src/domain/entities/DomainSwapRequest.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/swap_request/SwapRequestCallback.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/swap_request/SwapRequestRepository.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/BaseSchema.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/interfaces/ORMRepository.ts" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/domain/models/user/UserRepository.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/implementation/MysqlHelpwe.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/implementation/ORMRepostory.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/points/PointsRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/implementation/MongoORMRepository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/auth/AuthRepository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/entities/DomainUser.ts" />
+        <option value="$PROJECT_DIR$/src/controller/AuthController.ts" />
+        <option value="$PROJECT_DIR$/src/domain/services/AuthServeice.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/implementation/MysqlHelper.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/dal/DALUser.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/data_mapper/UserDataMapper.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/auth/AuthRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/privileges/PrivilegeRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/user/UserRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/user_interests/UserInterestsRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/swap_request/SwapRequestRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/user_item/UserItemRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/interests/InterestsRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/admin/AdminRepository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/entities/DomainAdminPrivilege.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdminPrivilege.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/types.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilege.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/types.ts" />
+        <option value="$PROJECT_DIR$/src/server.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/base/Repository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeRepository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeRepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdmin.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/data_mapper/AdminPrivilegeDataMapper.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/implementation/MysqlORMRepository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/base/RepositoryImp.ts" />
+        <option value="$PROJECT_DIR$/src/domain/entities/DomainAdmin.ts" />
+        <option value="$PROJECT_DIR$/src/infrastructure/implementation/ORMRepository.ts" />
+        <option value="$PROJECT_DIR$/src/domain/models/admin/AdminRepositoryImp.ts" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
+    <package-json value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="infrastructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="infrastructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data_mapper" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="domain" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="domain" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="domain" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="domain" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SwapV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="typescript-compiler-editor-notification" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.mongoOptions" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\nodejs\SwapV1\src\infrastructure\interfaces" />
+      <recent name="E:\nodejs\SwapV1\src\infrastructure" />
+      <recent name="E:\nodejs\SwapV1\src\infrastructure\dal\data_mapper" />
+      <recent name="E:\nodejs\SwapV1\src\infrastructure\dal\entities" />
+      <recent name="E:\nodejs\SwapV1\src\domain\models\points" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <method />
+    </configuration>
+    <configuration default="true" type="DartTestRunConfigurationType" factoryName="Dart Test">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="cucumber.js" factoryName="Cucumber.js">
+      <option name="cucumberJsArguments" value="" />
+      <option name="executablePath" />
+      <option name="filePath" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory />
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui />
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="83e8d940-604a-4d13-a46d-1410a50a33d6" name="Default" comment="" />
+      <created>1541984592272</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1541984592272</updated>
+      <workItem from="1541984593797" duration="48269000" />
+      <workItem from="1542273841682" duration="2507000" />
+      <workItem from="1542382474282" duration="25632000" />
+      <workItem from="1542578829230" duration="66710000" />
+      <workItem from="1543141868671" duration="51007000" />
+    </task>
+    <task id="LOCAL-00001" summary="normal admin [manage interests]&#10;super-admin [manage privileges for system control]">
+      <created>1542064910674</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1542064910674</updated>
+    </task>
+    <task id="LOCAL-00002" summary="items">
+      <created>1542555278518</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1542555278518</updated>
+    </task>
+    <task id="LOCAL-00003" summary="swap[create - accept - reject]">
+      <created>1542958068282</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1542958068282</updated>
+    </task>
+    <task id="LOCAL-00004" summary="saved state">
+      <created>1543171345990</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1543171345990</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="194125000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288364" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3153457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32715008" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32715008" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44182125" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32715008" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32715008" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
+    <option name="configsExcludedFiles">
+      <set>
+        <option value="$PROJECT_DIR$/build" />
+      </set>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="normal admin [manage interests]&#10;super-admin [manage privileges for system control]" />
+    <MESSAGE value="items" />
+    <MESSAGE value="swap[create - accept - reject]" />
+    <MESSAGE value="saved state" />
+    <option name="LAST_COMMIT_MESSAGE" value="saved state" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="10" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/mongoose/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="3350" column="4" lean-forward="false" selection-start-line="3350" selection-start-column="4" selection-end-line="3350" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/implementation/MongoORMRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1518">
+          <caret line="67" column="48" lean-forward="false" selection-start-line="67" selection-start-column="48" selection-end-line="67" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/AuthController.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="31" column="15" lean-forward="false" selection-start-line="31" selection-start-column="15" selection-end-line="31" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/services/AuthService.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="16" column="56" lean-forward="true" selection-start-line="16" selection-start-column="56" selection-end-line="16" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#45#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/sha1/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="14" column="78" lean-forward="false" selection-start-line="14" selection-start-column="72" selection-end-line="14" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/node/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="6141" column="15" lean-forward="false" selection-start-line="6141" selection-start-column="15" selection-end-line="6141" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/interfaces/EntityDataMapper.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="1" column="4" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/entities/DomainUser.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/dal/DALUser.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="14" column="4" lean-forward="false" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/data_mapper/UserDataMapper.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-74">
+          <caret line="20" column="76" lean-forward="false" selection-start-line="20" selection-start-column="76" selection-end-line="20" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/implementation/MysqlHelper.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="32" column="66" lean-forward="false" selection-start-line="32" selection-start-column="55" selection-end-line="32" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/interests/InterestsRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/InterestSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-161">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/points/PointsRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/UserInterestsSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="14" column="17" lean-forward="false" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#37#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/UserSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="62" column="17" lean-forward="false" selection-start-line="62" selection-start-column="17" selection-end-line="62" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ItemSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-184">
+          <caret line="29" column="20" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/SwapRequestSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="33" column="19" lean-forward="false" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/user/UserRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="84" column="40" lean-forward="false" selection-start-line="84" selection-start-column="40" selection-end-line="84" selection-end-column="40" />
+          <folding>
+            <element signature="n#!!block;n#isUserExist#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getUser#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#isUserOngoing#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getInterests#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#removeOneInterests#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#removeAllInterests#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#addItem#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#updateItem#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getOneItem#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getUserItems#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#removeItem#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#ask#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#accept#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#reject#0;n#UserRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#isFromIndividualToBusiness#0;n#UserRepositoryImp#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/swap_request/SwapRequestRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="411" column="26" lean-forward="false" selection-start-line="411" selection-start-column="26" selection-end-line="411" selection-end-column="26" />
+          <folding>
+            <element signature="n#!!block;n#ask#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getSwapRequest#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#accept#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#reject#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#unRegister7Days#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#isFirst#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#rollBackRequest#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#isRequestAlreadyThere#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#isRequestAlreadyThereFromSenderToReceiver#0;n#SwapRequestRepositoryImp#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/user_interests/UserInterestsRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="29" column="17" lean-forward="false" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/user_item/UserItemRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="45" column="62" lean-forward="false" selection-start-line="45" selection-start-column="62" selection-end-line="45" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/interests/InterestsRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/user/UserRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="8" column="47" lean-forward="false" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/auth/AuthRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="4" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/auth/AuthRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="60" column="27" lean-forward="true" selection-start-line="60" selection-start-column="27" selection-end-line="60" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/admin/AdminRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/ControlPrivilegeSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-138">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/AdminController.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="14" column="43" lean-forward="false" selection-start-line="14" selection-start-column="43" selection-end-line="14" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#92#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/entities/DomainAdminPrivilege.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="22" lean-forward="true" selection-start-line="2" selection-start-column="4" selection-end-line="5" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdminPrivilege.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/mongo/schemas/AdminSchema.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="33" column="11" lean-forward="false" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="4" lean-forward="true" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/privileges/PrivilegeRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="11" column="56" lean-forward="false" selection-start-line="11" selection-start-column="56" selection-end-line="11" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="95" column="78" lean-forward="false" selection-start-line="95" selection-start-column="54" selection-end-line="95" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/entities/DomainControlPrivilege.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" column="8" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#1#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/admin/admin_privilege/AdminPrivilegeRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="27" column="106" lean-forward="false" selection-start-line="27" selection-start-column="106" selection-end-line="27" selection-end-column="106" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/base/Repository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="87" lean-forward="false" selection-start-line="5" selection-start-column="87" selection-end-line="5" selection-end-column="88" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/data_mapper/AdminPrivilegeDataMapper.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="18" column="25" lean-forward="false" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#64#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/implementation/MysqlORMRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="23" column="97" lean-forward="false" selection-start-line="23" selection-start-column="97" selection-end-line="23" selection-end-column="97" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+            <element signature="n#!!block;n#constructor#0;n#MysqlORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#findMany#0;n#MysqlORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#insert#0;n#MysqlORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#update#0;n#MysqlORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#remove#0;n#MysqlORMRepository#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/dal/DALAdmin.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="10" column="22" lean-forward="false" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/entities/DomainAdmin.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="10" column="22" lean-forward="false" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/data_mapper/AdminDataMapper.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="8" column="40" lean-forward="false" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/entities/dal/DALInterest.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="24" lean-forward="false" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/entities/DomainInterest.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="27" lean-forward="false" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/implementation/ORMRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="111" column="0" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#findByOneKey#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#findAll#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#findAllByOneKey#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#findByTwoKeysWithQuery#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#insert#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#update#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#remove#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#findOne#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#findMany#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#insertV1#0;n#ORMRepository#0" expanded="false" />
+            <element signature="n#!!block;n#updateV1#0;n#ORMRepository#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/infrastructure/data_mapper/InterestDataMapper.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="14" column="49" lean-forward="false" selection-start-line="14" selection-start-column="49" selection-end-line="14" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/base/RepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="34" column="57" lean-forward="false" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+            <element signature="n#!!block;n#findByOneKey#0;n#RepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#findAllByOnKey#0;n#RepositoryImp#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/models/admin/AdminRepositoryImp.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="51" column="49" lean-forward="true" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
+          <folding>
+            <element signature="n#!!block;n#getAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#updateAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#removeAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getPrivilege#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getInnerAdmin#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#addInterest#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#getInterest#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#updateInterest#0;n#AdminRepositoryImp#0" expanded="false" />
+            <element signature="n#!!block;n#removeInterests#0;n#AdminRepositoryImp#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

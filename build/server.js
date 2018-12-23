@@ -1,14 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const mongoose = require("mongoose");
+const express = require("express");
+const node_fetch_1 = require("node-fetch");
 require("reflect-metadata");
 const inversify_1 = require("inversify");
 const inversify_express_utils_1 = require("inversify-express-utils");
+const multer = require("multer");
 // import classes annotated by @controller
 require("./controller/AuthController");
 require("./controller/InterestsController");
+require("./controller/AdminPrivilegeController");
 require("./controller/AdminController");
 require("./controller/UserInterestContoller");
 require("./controller/UserItemController");
@@ -43,6 +45,11 @@ const SwapRequestRepositoryImp_1 = require("./domain/models/swap_request/SwapReq
 const SwapRequestSchema_1 = require("./infrastructure/entities/mongo/schemas/SwapRequestSchema");
 const SwapRequestMapper_1 = require("./infrastructure/data_mapper/SwapRequestMapper");
 const SwapRequestService_1 = require("./domain/services/SwapRequestService");
+const MysqlORMRepository_1 = require("./infrastructure/implementation/MysqlORMRepository");
+const ORMRepository_1 = require("./infrastructure/implementation/ORMRepository");
+const AuthService_1 = require("./domain/services/AuthService");
+const AdminPrivilegeDataMapper_1 = require("./infrastructure/data_mapper/AdminPrivilegeDataMapper");
+const AdminPrivilegeRepositoryImp_1 = require("./domain/models/admin/admin_privilege/AdminPrivilegeRepositoryImp");
 // object container
 let container = new inversify_1.Container();
 //repositories
@@ -55,14 +62,19 @@ container.bind(types_1.TYPES.UserInterestsRepository).to(UserInterestsRepository
 container.bind(types_1.TYPES.UserRepository).to(UserRepositoryImp_1.UserRepositoryImp);
 container.bind(types_1.TYPES.UserItemRepository).to(UserItemRepositoryImp_1.UserItemRepositoryImp);
 container.bind(types_1.TYPES.SwapRequestRepository).to(SwapRequestRepositoryImp_1.SwapRequestRepositoryImp);
-//orm-mongo
-container.bind(types_2.TYPES.ORMRepositoryForUserEntity).to(MongoORMRepository_1.MongoORMRepository);
-container.bind(types_2.TYPES.ORMRepositoryForInterestEntity).to(MongoORMRepository_1.MongoORMRepository);
-container.bind(types_2.TYPES.ORMRepositoryForAdminEntity).to(MongoORMRepository_1.MongoORMRepository);
-container.bind(types_2.TYPES.ORMRepositoryForPrivilegeEntity).to(MongoORMRepository_1.MongoORMRepository);
-container.bind(types_2.TYPES.ORMRepositoryForUserInterestsEntity).to(MongoORMRepository_1.MongoORMRepository);
-container.bind(types_2.TYPES.ORMRepositoryForUserItemEntity).to(MongoORMRepository_1.MongoORMRepository);
-container.bind(types_2.TYPES.ORMRepositoryForSwapRequestEntity).to(MongoORMRepository_1.MongoORMRepository);
+container.bind(types_1.TYPES.AdminPrivilegeRepository).to(AdminPrivilegeRepositoryImp_1.AdminPrivilegeRepositoryImp);
+//base-orm
+container.bind(types_2.TYPES.ORMRepositoryForUserEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.ORMRepositoryForInterestEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.ORMRepositoryForAdminEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.ORMRepositoryForPrivilegeEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.ORMRepositoryForUserInterestsEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.ORMRepositoryForUserItemEntity).to(ORMRepository_1.ORMRepository);
+container.bind(types_2.TYPES.ORMRepositoryForSwapRequestEntity).to(ORMRepository_1.ORMRepository);
+//mysql orm
+container.bind(types_2.TYPES.MysqlORMRepository).to(MysqlORMRepository_1.MysqlORMRepository);
+//mongo orm
+container.bind(types_2.TYPES.MongoORMRepository).to(MongoORMRepository_1.MongoORMRepository);
 //Schemas
 container.bind(types_2.TYPES.UserSchema).to(UserSchema_1.UserSchema);
 container.bind(types_2.TYPES.InterestSchema).to(InterestSchema_1.InterestSchema);
@@ -80,21 +92,15 @@ container.bind(types_2.TYPES.EntityDataMapperForPrivilege).to(PrivilegeDataMappe
 container.bind(types_2.TYPES.EntityDataMapperForUserInterests).to(UserInterestsDataMapper_1.UserInterestsDataMapper);
 container.bind(types_2.TYPES.EntityDataMapperForItem).to(ItemDataMapper_1.ItemDataMapper);
 container.bind(types_2.TYPES.EntityDataMapperForSwapRequest).to(SwapRequestMapper_1.SwapRequestMapper);
+container.bind(types_2.TYPES.EntityDataMapperForAdminPrivilege).to(AdminPrivilegeDataMapper_1.AdminPrivilegeDataMapper);
 //services
 container.bind(types_1.TYPES.UserInterestService).to(UserInterestService_1.UserInterestService);
 container.bind(types_1.TYPES.UserItemService).to(UserItemService_1.UserItemService);
 container.bind(types_1.TYPES.SwapRequestService).to(SwapRequestService_1.SwapRequestService);
+container.bind(types_1.TYPES.AuthService).to(AuthService_1.AuthService);
 // build a server
 let server = new inversify_express_utils_1.InversifyExpressServer(container, null, { rootPath: "/api/v1" });
 server.setConfig((app) => {
-    // mongodb connection
-    const MONGO_URI = "mongodb://127.0.0.1:27017/swap-v2";
-    mongoose.connect(MONGO_URI || process.env.MONGODB_URI, { useNewUrlParser: true })
-        .then((res) => {
-        //console.info(res)
-    }).catch((err) => {
-        console.error(err);
-    });
     /*                 */
     /**** first run ****/
     /*                 */
@@ -108,8 +114,40 @@ server.setConfig((app) => {
     // });
     let logger = morgan('dev');
     app.use(logger);
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+    // app.use(bodyParser.urlencoded({ extended: false }));
+    // app.use(bodyParser.json());
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, './src/images/interests/');
+        },
+        filename: function (req, file, cb) {
+            if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
+                cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1]);
+        }
+    });
+    let upload = multer({ storage: storage });
+    app.post('/api/v1/admin/interests/add', upload.single('file'), function (req, res) {
+        if (req.file && req.body.name && req.body.nameAR && req.body.adminId) {
+            req.body.imageUrl = req.file.filename;
+            node_fetch_1.default('http://localhost:8000/api/v1/admin/interests/add-inner', {
+                method: 'POST',
+                body: JSON.stringify(req.body),
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then((respond) => {
+                if (respond.ok)
+                    res.status(200).json({ error: false, message: 'added successfully' });
+                else
+                    res.status(200).send({ error: true, message: 'error occured' });
+            })
+                .catch((err) => { res.send({ error: 'true', message: 'error occured' }); });
+        }
+        else {
+            res.status(200).json({ message: 'name, nameAR and adminId are required', error: true });
+        }
+    });
 });
 server.setErrorConfig((app) => {
     app.use((err, req, res, next) => {

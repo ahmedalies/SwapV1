@@ -16,9 +16,30 @@ export class UserInterestsDataMapper implements EntityDataMapper<DomainUserInter
 
     toDomain(dalObject: DALUserInterests): DomainUserInterests {
         let userInterest: DomainUserInterests = new DomainUserInterests();
-        userInterest._id = dalObject._id;
+        if (dalObject._id)
+            userInterest._id = dalObject._id;
         userInterest.userId = dalObject.userId;
-        userInterest.interests = dalObject.interests;
+
+        if(dalObject.uniqueAddedElement) {
+            let names = dalObject.uniqueAddedElement['name'];
+            let imageUrls = dalObject.uniqueAddedElement['image_url'];
+            let ids = dalObject.uniqueAddedElement['i_id'];
+
+            let counter = 0;
+            userInterest.interests = [];
+            if(names && names.length) {
+                names.forEach(element => {
+                    let i = {
+                        _id: ids[counter],
+                        name: element,
+                        imageUrl: imageUrls[counter]
+                    }
+                    userInterest.interests.push(i);
+                    counter++
+                });
+            }
+        }
+
         return userInterest;
     }
 }

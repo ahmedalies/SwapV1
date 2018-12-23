@@ -24,54 +24,29 @@ const express = require("express");
 const inversify_express_utils_1 = require("inversify-express-utils");
 const inversify_1 = require("inversify");
 const types_1 = require("../domain/types");
-const DomainUser_1 = require("../domain/entities/DomainUser");
+const AuthService_1 = require("../domain/services/AuthService");
 let AuthController = class AuthController {
     constructor(_repositry) {
         this._repositry = _repositry;
     }
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                if (req.body.email && req.body.password) {
-                    const user = yield this._repositry.login(req.body.email, req.body.password);
-                    res.status(200).send({ user: user, error: false });
-                }
-                else {
-                    res.status(200).send({ message: 'email and password field are required', error: true });
-                }
-            }
-            catch (error) {
-                res.status(200).send({ message: error, error: true });
-            }
+            yield this._repositry.login(req.body)
+                .then((r) => {
+                res.status(200).send({ user: r, error: false });
+            }).catch((err) => {
+                res.status(200).send({ message: err, error: true });
+            });
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const name = req.body.name;
-                const email = req.body.email;
-                const password = req.body.password;
-                const phone = req.body.phone;
-                if (email && name && password && phone) {
-                    let data = new DomainUser_1.DomainUser();
-                    data.name = name;
-                    data.email = email;
-                    data.password = password;
-                    data.phone = phone;
-                    yield this._repositry.register(data)
-                        .then((user) => {
-                        res.status(200).send({ user: user, error: false });
-                    }).catch((err) => {
-                        res.status(200).send({ message: err, error: true });
-                    });
-                }
-                else {
-                    res.status(200).send({ message: 'email and password field are required', error: true });
-                }
-            }
-            catch (error) {
-                res.status(200).send({ message: error.message, error: true });
-            }
+            yield this._repositry.register(req.body)
+                .then((user) => {
+                res.status(200).send({ user: user, error: false });
+            }).catch((err) => {
+                res.status(200).send({ message: err, error: true });
+            });
         });
     }
 };
@@ -91,8 +66,8 @@ __decorate([
 ], AuthController.prototype, "create", null);
 AuthController = __decorate([
     inversify_express_utils_1.controller('/user/auth'),
-    __param(0, inversify_1.inject(types_1.TYPES.AuthRepository)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, inversify_1.inject(types_1.TYPES.AuthService)),
+    __metadata("design:paramtypes", [AuthService_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=AuthController.js.map

@@ -1,5 +1,5 @@
 export class DALControlPrivilege {
-    _id: string;
+    id: number;
     f_name: string;
     created_at;
 }

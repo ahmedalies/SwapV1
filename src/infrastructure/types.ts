@@ -1,5 +1,5 @@
 export const TYPES = {
-    //orm
+    //base-orm
     ORMRepositoryForUserEntity: Symbol.for('ORMRepository<DALUser>'),
     ORMRepositoryForInterestEntity: Symbol.for('ORMRepository<DALInterest>'),
     ORMRepositoryForAdminEntity: Symbol.for('ORMRepository<DALAdmin>'),
@@ -7,6 +7,13 @@ export const TYPES = {
     ORMRepositoryForUserInterestsEntity: Symbol.for('ORMRepository<DALUserInterests>'),
     ORMRepositoryForUserItemEntity: Symbol.for('ORMRepository<DALItem>'),
     ORMRepositoryForSwapRequestEntity: Symbol.for('ORMRepository<DALSwapRequest>'),
+    ORMRepositoryForAdminPrivilegeEntity: Symbol.for('ORMRepository<DALSwapRequest>'),
+
+    //mysql-orm
+    MysqlORMRepository: Symbol.for('MysqlORMRepository'),
+
+    //mysql-orm
+    MongoORMRepository: Symbol.for('MongoORMRepository'),
 
     //data mapper
     EntityDataMapperForUser: Symbol.for('EntityDataMapper<DomainUser, DALUser>'),
@@ -17,6 +24,7 @@ export const TYPES = {
     EntityDataMapperForUserInterests: Symbol.for('EntityDataMapper<DomianUserInterests, DALUserInterests>'),
     EntityDataMapperForItem: Symbol.for('EntityDataMapper<DomianItem, DALItem>'),
     EntityDataMapperForSwapRequest: Symbol.for('EntityDataMapper<DomianSwapRequest, DALSwapRequest>'),
+    EntityDataMapperForAdminPrivilege: Symbol.for('EntityDataMapper<DomianAdminPrivilege, DALAdminPrivilege>'),
 
     //mongo schema
     UserSchema: Symbol.for('UserSchema'),

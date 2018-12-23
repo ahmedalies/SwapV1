@@ -124,7 +124,7 @@ export class Configuration {
         //     .then((res) => {
         //         if (res && res.length) {
         //             res.forEach((x) => {
-        //                 Configuration.intervals.push(x._id) = setInterval(() => {
+        //                 Configuration.intervals.push(x.id) = setInterval(() => {
         //                     console.log('-1000');
         //                     if (x[0].oneWeekMilli >= 1000){
         //                         x[0].oneWeekMilli = x[0].oneWeekMilli - 1000;

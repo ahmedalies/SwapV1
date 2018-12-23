@@ -1,14 +1,18 @@
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan';
 import * as mongoose from 'mongoose';
-
+import * as express from 'express';
+import fetch from 'node-fetch'
 import "reflect-metadata";
-import {Container} from 'inversify';
+import {Container, inject} from 'inversify';
 import {interfaces, InversifyExpressServer, TYPE} from 'inversify-express-utils'
+import * as multer from "multer";
+import * as http from 'http';   
 
 // import classes annotated by @controller
 import './controller/AuthController'
 import './controller/InterestsController'
+import './controller/AdminPrivilegeController'
 import './controller/AdminController'
 import './controller/UserInterestContoller'
 import './controller/UserItemController'
@@ -29,7 +33,7 @@ import { PointsRepository } from './domain/models/points/PointsRepository';
 import { DomianPointSystem } from './domain/entities/DomainPointSystem';
 import { DALPointSystem } from './infrastructure/entities/dal/DALPointSystem';
 import { UserSchema } from './infrastructure/entities/mongo/schemas/UserSchema';
-import { BaseSchema } from './infrastructure/entities/mongo/schemas/BaseSchema';
+import { BaseSchema } from './infrastructure/interfaces/BaseSchema';
 import {InterestsRepository} from "./domain/models/interests/InterestsRepository";
 import {InterestsRepositoryImp} from "./domain/models/interests/InterestsRepositoryImp";
 import {DomainInterest} from "./domain/entities/DomainInterest";
@@ -71,6 +75,15 @@ import {SwapRequestMapper} from "./infrastructure/data_mapper/SwapRequestMapper"
 import {DALSwapRequest} from "./infrastructure/entities/dal/DALSwapRequest";
 import {DomainSwapRequest} from "./domain/entities/DomainSwapRequest";
 import {SwapRequestService} from "./domain/services/SwapRequestService";
+import {MysqlORMRepository} from "./infrastructure/implementation/MysqlORMRepository";
+import {ORMRepository} from "./infrastructure/implementation/ORMRepository";
+import {AuthService} from "./domain/services/AuthService";
+import {DomainAdminPrivilege} from "./domain/entities/DomainAdminPrivilege";
+import {DALAdminPrivilege} from "./infrastructure/entities/dal/DALAdminPrivilege";
+import {AdminPrivilegeDataMapper} from "./infrastructure/data_mapper/AdminPrivilegeDataMapper";
+import {AdminPrivilegeRepositoryImp} from "./domain/models/admin/admin_privilege/AdminPrivilegeRepositoryImp";
+import {AdminPrivilegeRepository} from "./domain/models/admin/admin_privilege/AdminPrivilegeRepository";
+import { InterestsController } from './controller/InterestsController';
 
 // object container
 let container = new Container();
@@ -85,15 +98,23 @@ container.bind<UserInterestsRepository>(DOMAIN_TYPES.UserInterestsRepository).to
 container.bind<UserRepository>(DOMAIN_TYPES.UserRepository).to(UserRepositoryImp);
 container.bind<UserItemRepository>(DOMAIN_TYPES.UserItemRepository).to(UserItemRepositoryImp);
 container.bind<SwapRequestRepository>(DOMAIN_TYPES.SwapRequestRepository).to(SwapRequestRepositoryImp);
+container.bind<AdminPrivilegeRepository>(DOMAIN_TYPES.AdminPrivilegeRepository).to(AdminPrivilegeRepositoryImp);
 
-//orm-mongo
-container.bind<MongoORMRepository<DALUser>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserEntity).to(MongoORMRepository);
-container.bind<MongoORMRepository<DALInterest>>(INFRASTRUCTURE_TYPES.ORMRepositoryForInterestEntity).to(MongoORMRepository);
-container.bind<MongoORMRepository<DALAdmin>>(INFRASTRUCTURE_TYPES.ORMRepositoryForAdminEntity).to(MongoORMRepository);
-container.bind<MongoORMRepository<DALControlPrivilege>>(INFRASTRUCTURE_TYPES.ORMRepositoryForPrivilegeEntity).to(MongoORMRepository);
-container.bind<MongoORMRepository<DALUserInterests>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserInterestsEntity).to(MongoORMRepository);
-container.bind<MongoORMRepository<DALItem>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserItemEntity).to(MongoORMRepository);
-container.bind<MongoORMRepository<DALSwapRequest>>(INFRASTRUCTURE_TYPES.ORMRepositoryForSwapRequestEntity).to(MongoORMRepository);
+//base-orm
+container.bind<ORMRepository<DALUser>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserEntity).to(ORMRepository);
+container.bind<ORMRepository<DALInterest>>(INFRASTRUCTURE_TYPES.ORMRepositoryForInterestEntity).to(ORMRepository);
+container.bind<ORMRepository<DALAdmin>>(INFRASTRUCTURE_TYPES.ORMRepositoryForAdminEntity).to(ORMRepository);
+container.bind<ORMRepository<DALControlPrivilege>>(INFRASTRUCTURE_TYPES.ORMRepositoryForPrivilegeEntity).to(ORMRepository);
+container.bind<ORMRepository<DALUserInterests>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserInterestsEntity).to(ORMRepository);
+container.bind<ORMRepository<DALItem>>(INFRASTRUCTURE_TYPES.ORMRepositoryForUserItemEntity).to(ORMRepository);
+container.bind<ORMRepository<DALSwapRequest>>(INFRASTRUCTURE_TYPES.ORMRepositoryForSwapRequestEntity).to(ORMRepository);
+
+//mysql orm
+container.bind<MysqlORMRepository>(INFRASTRUCTURE_TYPES.MysqlORMRepository).to(MysqlORMRepository);
+
+//mongo orm
+container.bind<MongoORMRepository>(INFRASTRUCTURE_TYPES.MongoORMRepository).to(MongoORMRepository);
+
 
 //Schemas
 container.bind<BaseSchema>(INFRASTRUCTURE_TYPES.UserSchema).to(UserSchema);
@@ -113,26 +134,17 @@ container.bind<EntityDataMapper<DomainControlPrivilege, DALControlPrivilege>>(IN
 container.bind<EntityDataMapper<DomainUserInterests, DALUserInterests>>(INFRASTRUCTURE_TYPES.EntityDataMapperForUserInterests).to(UserInterestsDataMapper);
 container.bind<EntityDataMapper<DomainItem, DALItem>>(INFRASTRUCTURE_TYPES.EntityDataMapperForItem).to(ItemDataMapper);
 container.bind<EntityDataMapper<DomainSwapRequest, DALSwapRequest>>(INFRASTRUCTURE_TYPES.EntityDataMapperForSwapRequest).to(SwapRequestMapper);
+container.bind<EntityDataMapper<DomainAdminPrivilege, DALAdminPrivilege>>(INFRASTRUCTURE_TYPES.EntityDataMapperForAdminPrivilege).to(AdminPrivilegeDataMapper);
 
 //services
 container.bind<UserInterestService>(DOMAIN_TYPES.UserInterestService).to(UserInterestService);
 container.bind<UserItemService>(DOMAIN_TYPES.UserItemService).to(UserItemService);
 container.bind<SwapRequestService>(DOMAIN_TYPES.SwapRequestService).to(SwapRequestService);
-
+container.bind<AuthService>(DOMAIN_TYPES.AuthService).to(AuthService);
 
 // build a server
 let server = new InversifyExpressServer(container, null, { rootPath: "/api/v1" });
-
 server.setConfig((app) => {
-    // mongodb connection
-    const MONGO_URI = "mongodb://127.0.0.1:27017/swap-v2";
-    mongoose.connect(MONGO_URI || process.env.MONGODB_URI, { useNewUrlParser: true })
-        .then((res) => {
-            //console.info(res)
-        }).catch((err) => {
-            console.error(err);
-        });
-
     /*                 */
     /**** first run ****/
     /*                 */
@@ -147,8 +159,41 @@ server.setConfig((app) => {
 
     let logger = morgan('dev');
     app.use(logger);
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    app.use(express.json());
+    app.use(express.urlencoded({extended: false}));
+    // app.use(bodyParser.urlencoded({ extended: false }));
+    // app.use(bodyParser.json());
+
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, './src/images/interests/')
+        },
+        filename: function (req, file, cb) {
+            if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
+                cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1])
+        }
+    })
+    let upload = multer({ storage: storage })
+    app.post('/api/v1/admin/interests/add', upload.single('file'), function(req, res){
+        if (req.file && req.body.name && req.body.nameAR && req.body.adminId){
+            req.body.imageUrl = req.file.filename;
+            fetch('http://localhost:8000/api/v1/admin/interests/add-inner', { 
+                method: 'POST',
+                body:    JSON.stringify(req.body),
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then((respond) => {
+                if(respond.ok)
+                    res.status(200).json({error: false, message: 'added successfully'})
+                else
+                    res.status(200).send({error: true, message: 'error occured'})
+            })
+            .catch((err) => {res.send({error: 'true', message: 'error occured'})})
+        } else {
+            res.status(200).json({message: 'imageFile, name, nameAR and adminId are required', error: true});
+        }
+        
+    }); 
 });
 
 server.setErrorConfig((app) => {

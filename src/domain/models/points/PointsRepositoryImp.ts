@@ -7,12 +7,14 @@ import { PointsDataMapper } from '../../../infrastructure/data_mapper/PointsData
 import { PointsRepository } from "./PointsRepository";
 import { TYPES } from "../../../infrastructure/types";
 import { MongoORMRepository } from "../../../infrastructure/implementation/MongoORMRepository";
+import {MysqlORMRepository} from "../../../infrastructure/implementation/MysqlORMRepository";
+import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
 
 @injectable()
 export class PointsRepositoryImp extends RepositoryImp<DomianPointSystem, DALPointSystem> implements PointsRepository {
 
     public constructor(
-        @inject(TYPES.ORMRepositoryForUserEntity) repository: MongoORMRepository<DALPointSystem>,
+        @inject(TYPES.ORMRepositoryForUserEntity) repository: ORMRepository<DALPointSystem>,
         @inject(TYPES.EntityDataMapperForPoint) dataMapper: PointsDataMapper,
         @inject(TYPES.UserSchema) model: PointSystemSchema
     ){

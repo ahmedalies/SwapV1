@@ -1,4 +1,6 @@
 import {inject, injectable} from "inversify";
+import * as Busboy from "busboy";
+import * as fs from 'fs'
 import {RepositoryImp} from "../base/RepositoryImp";
 import {DomainAdmin} from "../../entities/DomainAdmin";
 import {DALAdmin} from "../../../infrastructure/entities/dal/DALAdmin";
@@ -14,38 +16,51 @@ import {PrivilegeRepository} from "../privileges/PrivilegeRepository";
 import {PrivilegeRepositoryImp} from "../privileges/PrivilegeRepositoryImp";
 import {DomainInterest} from "../../entities/DomainInterest";
 import {DomainControlPrivilege} from "../../entities/DomainControlPrivilege";
+import {MysqlORMRepository} from "../../../infrastructure/implementation/MysqlORMRepository";
+import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
+import {AdminPrivilegeRepositoryImp} from "./admin_privilege/AdminPrivilegeRepositoryImp";
+import { promises } from "fs";
+import { resolve } from "url";
+import { DomainAdminPrivilege } from "../../entities/DomainAdminPrivilege";
 
 @injectable()
 export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> implements AdminRepository {
-    interests: InterestsRepository;
-    privilege: PrivilegeRepository;
-    repository: MongoORMRepository<DALAdmin>;
-    model: AdminSchema;
 
     constructor(
-        @inject(TYPES.ORMRepositoryForAdminEntity) repository: MongoORMRepository<DALAdmin>,
-        @inject(TYPES.EntityDataMapperForAdmin) dataMapper: AdminDataMapper,
-        @inject(TYPES.AdminSchema) model: AdminSchema,
-        @inject(DOMAIN_TYPES.InterestsRepository) interests: InterestsRepositoryImp,
-        @inject(DOMAIN_TYPES.PrivilegeRepository) privilege: PrivilegeRepositoryImp
+        @inject(TYPES.ORMRepositoryForAdminEntity) private repository: ORMRepository<DALAdmin>,
+        @inject(TYPES.EntityDataMapperForAdmin) private dataMapper: AdminDataMapper,
+        @inject(TYPES.AdminSchema) private model: AdminSchema,
+        @inject(DOMAIN_TYPES.InterestsRepository) private interests: InterestsRepositoryImp,
+        @inject(DOMAIN_TYPES.PrivilegeRepository) private privilege: PrivilegeRepositoryImp,
+        @inject(DOMAIN_TYPES.AdminPrivilegeRepository) private adminPrivilege: AdminPrivilegeRepositoryImp
     ){
-        super(repository, dataMapper, model);
-        this.interests = interests;
-        this.privilege = privilege;
-        this.repository = repository;
-        this.model = model;
+        super(repository, dataMapper, ['admins']);
     }
 
 
     public async createAdmin(creatorId: string, admin: DomainAdmin): Promise<DomainAdmin> {
         return await new Promise<DomainAdmin> ((resolve, reject) => {
-            this.hasPrivilege(creatorId, 'createAdmin')
-                .then((res) => {
-                    super.insert(admin)
-                        .then((res) => {
-                            resolve(res);
-                        }).catch((err) => {
-                            reject(err);
+            super.createSHA1Hash(admin.username)
+                .then((hashKey) => {
+                super.createSHA1Hash(admin.username + Date.now())
+                    .then((accessToken) => {
+                        this.hasPrivilege(creatorId, 'createAdmin')
+                            .then((res) => {
+                                super.insert(['_id', 'username' ,'accessToken', 'password', 'loggedIn', 'online'],
+                                    [hashKey, admin.username, accessToken, admin.password, '1', '1'])
+                                    .then((res) => {
+                                        console.log(res);
+                                        resolve(res);
+                                    }).catch((err) => {
+                                        console.log(err)
+                                        reject(err);
+                                    });
+                            }).catch((err) => {
+                                console.log(err);
+                                reject(err);
+                            });
+                    }).catch((err) => {
+                        reject(err);
                     });
                 }).catch((err) => {
                     reject(err);
@@ -54,11 +69,10 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
     }
 
     public async getAdmin(creatorId: string, id: string): Promise<DomainAdmin> {
-        let query = {_id: id};
         return await new Promise<DomainAdmin> ((resolve, reject) => {
             this.hasPrivilege(creatorId, 'getAdmin')
                 .then((res) => {
-                    super.findByOneKey(query)
+                    super.findOne([], ['_id'], [id], 0)
                         .then((res) => {
                             resolve(res);
                         }).catch((err) => {
@@ -74,15 +88,17 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
         return await new Promise<DomainAdmin> ((resolve, reject) => {
             this.hasPrivilege(creatorId, 'updateAdmin')
                 .then((res) => {
-                    super.update(id, admin)
+                    super.update(['username' ,'accessToken', 'password', 'loggedIn', 'online'],
+                        [admin.username, admin.accessToken, admin.password, '1', '1'],
+                        ['_id'], [id])
                         .then((res) => {
                             resolve(res);
                         }).catch((err) => {
                             reject(err);
-                    });
+                        });
                 }).catch((err) => {
                     reject(err);
-            });
+                });
         });
     }
 
@@ -102,7 +118,6 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
         });
     }
 
-
     public async getPrivilege(privilegeName: string): Promise<DomainControlPrivilege> {
         return await new Promise<DomainControlPrivilege>((resolve, reject) => {
             this.privilege.getPrivilege(privilegeName)
@@ -119,12 +134,22 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
 
     private async getInnerAdmin(adminId: string): Promise<DomainAdmin> {
         return await new Promise<DomainAdmin> ((resolve, reject) => {
-            const query = {_id: adminId};
-            this.repository.findByOneKey(query, this.model)
-                .then((res) => {
-                    resolve(res);
+            this.repository.findOne(['admins.*', 'controlprivileges.f_name',
+             'controlPrivileges.id as controlPrivilegeId'], 
+             ['admins._id', 'admins.id', 'controlprivileges.id'],
+              [adminId, 'adminprivileges.admin', 'adminprivileges.privilege'], 1,
+             ['admins', 'adminprivileges', 'controlprivileges'])
+                .then((admin) => {
+                    resolve(this.dataMapper.toDomain(admin))
                 }).catch((err) => {
-                    reject(err);
+                    if (err === 'document not found'){
+                        this.repository.findOne([], ['admins._id'], [adminId], 0, ['admins'])
+                        .then((res) => {
+                            resolve(this.dataMapper.toDomain(res));
+                        }).catch((err) => {
+                            reject(err);
+                        });
+                    }
                 });
         });
     }
@@ -133,31 +158,31 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
         return await new Promise<DomainAdmin>((resolve, reject) => {
             this.getPrivilege(privilegeName)
                 .then((res) => {
-                const privilegeId: string = res._id;
+                    const privilegeId = res.id;
                     this.getInnerAdmin(adminId)
                         .then((res) => {
                             const privilegesArr = res.privileges;
                             let p_found: boolean = false;
                             if (privilegesArr){
-                                privilegesArr.forEach((item: string) => {
-                                    if (JSON.stringify(item) === JSON.stringify(privilegeId)) {
+                                privilegesArr.forEach((item: DomainControlPrivilege) => {
+                                    if (JSON.stringify(item.id) === JSON.stringify(privilegeId)) {
                                         p_found = true;
                                     }
                                 });
                                 if (p_found){
                                     resolve(res);
                                 } else {
-                                    reject('this admin does not have this privilege');
+                                    reject(res.username + ' does not have this privilege ' + privilegeName);
                                 }
                             } else {
-                                reject('this admin has no privileges')
+                                reject(res.username + ' has no privileges yet')
                             }
                         }).catch((err) => {
-                        reject(err);
-                    });
+                            reject(err);
+                        });
                 }).catch((err) => {
                     reject(err);
-            });
+                });
         });
     }
 
@@ -165,10 +190,12 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
         return await new Promise<DomainInterest>((resolve, reject) => {
             this.hasPrivilege(adminId, 'addInterest')
                 .then((res) => {
+                    interest.created_by.id = res.id;
                     this.interests.addInterest(interest)
                         .then((res) => {
                             resolve(res);
                         }).catch((err) => {
+                            console.log(err)
                             reject(err);
                         });
                 }).catch((err) => {
@@ -222,6 +249,53 @@ export class AdminRepositoryImp extends RepositoryImp<DomainAdmin, DALAdmin> imp
                 }).catch((err) => {
                     reject(err);
                 });
+        });
+    }
+
+    public async assingAdminPrivilege(creatorId: string, adminId: string, privilegeName: string): Promise<DomainAdmin> {
+        return await new Promise<DomainAdmin>((resolve, reject) => {
+            this.hasPrivilege(creatorId, 'assignAdminPrivilege')
+            .then((res) => {
+                this.privilege.getPrivilege(privilegeName)
+                .then((res) => {
+                    let domainAdminPrivilege = new DomainAdminPrivilege();
+                    domainAdminPrivilege.privilegeId = res.id; 
+                    this.getInnerAdmin(adminId)
+                    .then((admin) => {
+                        domainAdminPrivilege.adminId = admin.id;   
+                        this.adminPrivilege.getAdminPrivilege(domainAdminPrivilege.privilegeId, domainAdminPrivilege.adminId)
+                        .then((res) => {
+                            if (res) {
+                                reject('this admin ' + admin.username  + ' already has this privilege ' + privilegeName)
+                            }
+                        }).catch((err) => {
+                            if (err === 'document not found'){
+                                this.adminPrivilege.addAdminPrivilege(domainAdminPrivilege)
+                                .then((res) => {
+                                    this.getInnerAdmin(admin._id)
+                                    .then((a) => {
+                                        resolve(a);
+                                    }).catch((err) => {
+                                        reject(err);
+                                    })
+                                }).catch((err) => {
+                                    console.log(err)
+                                    reject(err);
+                                });
+                            } else {
+                                reject(err);
+                            }
+                        });
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                }).catch((err) => {
+                    reject(err);
+                });
+            }).catch((err) => {
+                console.log(err);
+                reject(err);
+            });
         });
     }
 }

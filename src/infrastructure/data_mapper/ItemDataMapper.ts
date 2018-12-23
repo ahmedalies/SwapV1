@@ -10,13 +10,32 @@ export class ItemDataMapper implements EntityDataMapper<DomainItem, DALItem>{
 
     toDomain(dalObject: DALItem): DomainItem {
         let item: DomainItem = new DomainItem();
+        item.id = dalObject.id;
         item._id = dalObject._id;
         item.status = dalObject.status;
         item.name = dalObject.name;
         item.description = dalObject.description;
         item.oneWeekMilli = dalObject.oneWeekMilli;
         item.owner = new DomainUser();
-        item.owner._id = dalObject.owner;
+
+        if (dalObject.uniqueAddedElement) {
+            let ownerAr = dalObject.uniqueAddedElement['ownerId'];
+            let ownerTypeAr = dalObject.uniqueAddedElement['ownerType'];
+            let itemState = dalObject.uniqueAddedElement['state'];
+            
+            if (ownerAr){
+                item.owner._id = ownerAr[0];
+            }
+
+            if(ownerTypeAr) {
+                item.owner.typeString = ownerTypeAr[0]
+            }
+
+            if(itemState){
+                item.statusString = itemState[0]
+            }
+        }
+        
         item.i_urls = dalObject.i_urls;
         item.category = new DomainInterest();
         item.category._id = dalObject.category;

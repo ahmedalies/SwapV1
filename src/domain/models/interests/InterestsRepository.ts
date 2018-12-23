@@ -8,6 +8,7 @@ import {PrivilegeRepository} from "../privileges/PrivilegeRepository";
 export interface InterestsRepository extends Repository<DomainInterest> {
     addInterest(interest: DomainInterest): Promise<DomainInterest>;
     getInterest(id: string): Promise<DomainInterest>;
+    getAllInterest(): Promise<DomainInterest[]>;
     updateInterest(id: string, interest: DomainInterest): Promise<DomainInterest>;
     deleteInterest(id: string): Promise<boolean>;
 }

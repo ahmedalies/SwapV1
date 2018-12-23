@@ -4,7 +4,7 @@ import {DomainUser} from "../entities/DomainUser";
 import {AuthRepository} from "../models/auth/AuthRepository";
 
 @injectable()
-export class AuthServeice {
+export class AuthService {
     constructor(@inject(TYPES.AuthRepository) private repository: AuthRepository){}
 
     public async register(userDate: any): Promise<DomainUser>{
@@ -13,12 +13,16 @@ export class AuthServeice {
             const email = userDate.email;
             const password = userDate.password;
             const phone = userDate.phone;
-            if(email && name && password && phone){
+            const gender = userDate.gender;
+            const lang = userDate.lang;
+            if(email && name && password && phone && gender && lang){
                 let data: DomainUser = new DomainUser();
                 data.name = name;
                 data.email = email;
                 data.password = password;
                 data.phone = phone;
+                data.gender = gender;
+                data.lang = lang;
                 this.repository.register(data)
                     .then((user: DomainUser) => {
                        resolve(user);
@@ -26,7 +30,7 @@ export class AuthServeice {
                         reject(err);
                     });
             } else {
-                reject('name, email, password and phone fields are required');
+                reject('name, email, password, phone adn gender fields are required');
             }
         });
     }

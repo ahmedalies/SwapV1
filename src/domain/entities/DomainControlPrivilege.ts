@@ -1,5 +1,5 @@
 export class DomainControlPrivilege {
-    _id: string;
+    id: number;
     name: string;
     created_at;
 }

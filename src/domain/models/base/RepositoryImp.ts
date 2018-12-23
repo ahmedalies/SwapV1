@@ -1,28 +1,29 @@
 import { Repository } from "./Repository";
-import { MongoORMRepository } from "../../../infrastructure/implementation/MongoORMRepository";
 import { EntityDataMapper } from "../../../infrastructure/interfaces/EntityDataMapper";
 import { inject, unmanaged, injectable } from "inversify";
-import { BaseSchema } from "../../../infrastructure/entities/mongo/schemas/BaseSchema";
+import { BaseSchema } from "../../../infrastructure/interfaces/BaseSchema";
+import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
+import * as crypto from 'crypto';
 
 @injectable()
 export class RepositoryImp<DomainEntity, DALEntity> implements Repository<DomainEntity> {
 
-    protected readonly _repository: MongoORMRepository<DALEntity>;
+    protected readonly _repository: ORMRepository<DALEntity>;
     protected readonly _dataMapper: EntityDataMapper<DomainEntity, DALEntity>;
-    protected readonly _model: BaseSchema;
+    protected readonly _model: BaseSchema | string[];
 
     constructor(
-        @unmanaged() repository: MongoORMRepository<DALEntity>,
+        @unmanaged() repository: ORMRepository<DALEntity>,
         @unmanaged() dataMapper: EntityDataMapper<DomainEntity, DALEntity>,
-        @unmanaged() model: BaseSchema
+        @unmanaged() model: BaseSchema | string[]
     ){
         this._repository = repository;
         this._dataMapper = dataMapper;
         this._model = model;
     }
 
-    public async insert(data: DomainEntity): Promise<DomainEntity> {
-        return await this._repository.insert(this._dataMapper.toDAL(data), this._model)
+    public async insert(insertKeys: string[], insertValues: string[]): Promise<DomainEntity> {
+        return await this._repository.insertV1(insertKeys, insertValues, this._model)
         .then((res: DALEntity) => {
             return Promise.resolve(this._dataMapper.toDomain(res));
         }).catch((err) => {
@@ -31,7 +32,7 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
     }
 
     public async findByTwoKeys(queryElement: any): Promise<DomainEntity>{
-        return await this._repository.findByTwoKeys(queryElement, this._model)
+        return await this._repository.findByTwoKeysWithQuery(queryElement, this._model[0])
         .then((res: DALEntity) => {
             return Promise.resolve(this._dataMapper.toDomain(res));
         }).catch((err) => {
@@ -39,9 +40,30 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
         });
     }
 
+    public async findOne(selections: string[], whereKeys:string[], whereValues: string[], fromQoutes: number): Promise<DomainEntity>{
+        return await this._repository.findOne(selections, whereKeys, whereValues, fromQoutes, this._model)
+            .then((res: DALEntity) => {
+                return Promise.resolve(this._dataMapper.toDomain(res));
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+    }
+
+    public async findMany(selections: string[], whereKeys:string[], whereValues: string[], fromQoutes: number): Promise<DomainEntity[]>{
+        return await this._repository.findMany(selections, whereKeys, whereValues, fromQoutes, this._model)
+            .then((res: DALEntity[]) => {
+                let domainEntities = [];
+                res.forEach((item) => {
+                    domainEntities.push(this._dataMapper.toDomain(item));
+                });
+                return Promise.resolve(domainEntities);
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+    }
 
     public async findAll(): Promise<DomainEntity[]> {
-        return await this._repository.findAll(this._model)
+        return await this._repository.findAll(this._model[0])
             .then((res: DALEntity[]) => {
                 let domainEntities = [];
                 if (res) {
@@ -56,7 +78,7 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
     }
 
     public async findByOneKey(queryElement: any): Promise<DomainEntity> {
-        return await this._repository.findByOneKey(queryElement, this._model)
+        return await this._repository.findByOneKey(queryElement, this._model[0])
             .then((res: DALEntity) => {
                 return Promise.resolve(this._dataMapper.toDomain(res));
             }).catch((err) => {
@@ -64,8 +86,8 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
             });
     }
 
-    public async update(id: string, object: DomainEntity): Promise<DomainEntity> {
-        return await this._repository.update(id, this._dataMapper.toDAL(object), this._model)
+    public async update(updateKeys: string[], updateValues: string[], whereKeys: string[], whereValues: string[]): Promise<DomainEntity> {
+        return await this._repository.updateV1(updateKeys, updateValues, whereKeys, whereValues, this._model[0])
             .then((res: DALEntity) => {
                 return Promise.resolve(this._dataMapper.toDomain(res));
             }).catch((err) => {
@@ -74,7 +96,7 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
     }
 
     public async remove(id: string): Promise<boolean> {
-        return await this._repository.remove(id, this._model)
+        return await this._repository.remove(id, this._model[0])
             .then((res) => {
                 return Promise.resolve(true);
             }).catch((err) => {
@@ -83,7 +105,7 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
     }
 
     public async findAllByOnKey(queryElement: any): Promise<DomainEntity[]> {
-        return await this._repository.findAllByOneKey(queryElement, this._model)
+        return await this._repository.findAllByOneKey(queryElement, this._model[0])
             .then((res: DALEntity[]) => {
                 let domainEntities = [];
                 if (res) {
@@ -95,5 +117,16 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
             }).catch((err) => {
                 return Promise.reject(err);
             });
+    }
+
+
+    public async createSHA1Hash(value: any): Promise<string> {
+        return await new Promise<string>((resolve, reject) => {
+            try {
+                resolve(crypto.createHash('sha1').update(value).digest('hex'));
+            } catch(err) {
+                reject(err);
+            }
+        });
     }
 }
