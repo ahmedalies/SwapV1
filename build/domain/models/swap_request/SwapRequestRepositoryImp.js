@@ -23,12 +23,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var SwapRequestRepositoryImp_1;
 const inversify_1 = require("inversify");
 const RepositoryImp_1 = require("../base/RepositoryImp");
+const DomainSwapRequest_1 = require("../../entities/DomainSwapRequest");
 const types_1 = require("../../../infrastructure/types");
 const types_2 = require("../../types");
 const SwapRequestMapper_1 = require("../../../infrastructure/data_mapper/SwapRequestMapper");
 const SwapRequestSchema_1 = require("../../../infrastructure/entities/mongo/schemas/SwapRequestSchema");
 const UserItemRepositoryImp_1 = require("../user_item/UserItemRepositoryImp");
 const ORMRepository_1 = require("../../../infrastructure/implementation/ORMRepository");
+const DomainItem_1 = require("../../entities/DomainItem");
+const DomainUser_1 = require("../../entities/DomainUser");
 let SwapRequestRepositoryImp = SwapRequestRepositoryImp_1 = class SwapRequestRepositoryImp extends RepositoryImp_1.RepositoryImp {
     constructor(repository, dataMapper, model, userItem) {
         super(repository, dataMapper, ['swaprequests']);
@@ -43,6 +46,133 @@ let SwapRequestRepositoryImp = SwapRequestRepositoryImp_1 = class SwapRequestRep
             SwapRequestRepositoryImp_1.oneDayIntervals = [];
         }
     }
+    getSwapRequestsForUser(userId, type) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let sql = '';
+            if (type === 'running') {
+                sql = "SELECT swaprequests._id,swaprequests.sender_item,swaprequests.receiver_item,swaprequests.created_at,"
+                    + " items.id,items.name,items.description,items.owner,items.createdAt,"
+                    + " itemimages.url,itemimages.item as itemid,"
+                    + " users.id as userid,users.username,users.avatar"
+                    + " from items,itemstatus,swaprequests,swapstatus,users,itemimages"
+                    + " where items.status=itemstatus.id and itemstatus.state='available'"
+                    + " and swaprequests.status=swapstatus.id and swapstatus.state='ongoing'"
+                    + " having(items.owner=users.id and"
+                    + " items.owner=" + userId.toString()
+                    + " and (swaprequests.sender_item=items.id or swaprequests.receiver_item=items.id)"
+                    + " and items.id=itemimages.item)";
+            }
+            else if (type === 'accepted') {
+                sql = "SELECT swaprequests._id,swaprequests.sender_item,swaprequests.receiver_item,swaprequests.created_at,"
+                    + " swaprequests.receiver_rate,swaprequests.sender_rate,swaprequests.respond_at,"
+                    + " items.id,items.name,items.description,items.owner,items.createdAt,"
+                    + " itemimages.url,itemimages.item as itemid,"
+                    + " users.id as userid,users.username,users.avatar"
+                    + " from items,itemstatus,swaprequests,swapstatus,users,itemimages"
+                    + " where items.status=itemstatus.id and (itemstatus.state='in-swapping' or itemstatus.state='swapped')"
+                    + " and swaprequests.status=swapstatus.id and swapstatus.state='accepted'"
+                    + " having(items.owner=users.id and"
+                    + " items.owner=" + userId.toString()
+                    + " and (swaprequests.sender_item=items.id or swaprequests.receiver_item=items.id)"
+                    + " and items.id=itemimages.item)";
+            }
+            else if (type === 'rejected') {
+                sql = "SELECT swaprequests._id,swaprequests.sender_item,swaprequests.receiver_item,swaprequests.created_at,"
+                    + " swaprequests.receiver_rate,swaprequests.sender_rate,swaprequests.respond_at,"
+                    + " items.id,items.name,items.description,items.owner,items.createdAt,"
+                    + " itemimages.url,itemimages.item as itemid,"
+                    + " users.id as userid,users.username,users.avatar"
+                    + " from items,itemstatus,swaprequests,swapstatus,users,itemimages"
+                    + " where items.status=itemstatus.id"
+                    + " and swaprequests.status=swapstatus.id and swapstatus.state='rejected'"
+                    + " having(items.owner=users.id and"
+                    + " items.owner=" + userId.toString()
+                    + " and (swaprequests.sender_item=items.id or swaprequests.receiver_item=items.id)"
+                    + " and items.id=itemimages.item)";
+            }
+            return yield new Promise((resolve, reject) => {
+                if (sql) {
+                    this.repository.perform(sql)
+                        .then((result) => {
+                        if (result && result.length > 0) {
+                            let swapIds = [];
+                            let swaps = [];
+                            result.forEach(element => {
+                                let swap = new DomainSwapRequest_1.DomainSwapRequest();
+                                if (swapIds.indexOf(element._id) >= 0) {
+                                    let index = swapIds.indexOf(element._id);
+                                    if (element.url) {
+                                        if (swaps[index].iamTheSender) {
+                                            swaps[index].senderItem.i_urls.push(element.url);
+                                        }
+                                        else {
+                                            swaps[index].receiverItem.i_urls.push(element.url);
+                                        }
+                                    }
+                                }
+                                else {
+                                    swapIds.push(element._id);
+                                    swap._id = element._id;
+                                    swap.createdAt = element.created_at;
+                                    let sender = new DomainItem_1.DomainItem();
+                                    sender.id = element.sender_item;
+                                    let receiver = new DomainItem_1.DomainItem();
+                                    receiver.id = element.receiver_item;
+                                    if (element.sender_rate) {
+                                        swap.senderItem;
+                                    }
+                                    if (element.receiver_rate) {
+                                        swap.receiverRate;
+                                    }
+                                    if (element.respond_at) {
+                                        swap.respondAt;
+                                    }
+                                    if (element.id === element.sender_item) {
+                                        swap.iamTheSender = true;
+                                        sender.name = element.name;
+                                        sender.description = element.description;
+                                        sender.owner = new DomainUser_1.DomainUser();
+                                        sender.owner.name = element.username;
+                                        sender.owner.avatar = element.avatar;
+                                        sender.createdAt = element.createdAt;
+                                        if (element.url) {
+                                            sender.i_urls = [];
+                                            sender.i_urls.push(element.url);
+                                        }
+                                    }
+                                    else if (element.id === element.receiver_item) {
+                                        swap.iamTheSender = false;
+                                        receiver.name = element.name;
+                                        receiver.description = element.description;
+                                        receiver.owner = new DomainUser_1.DomainUser();
+                                        receiver.owner.name = element.username;
+                                        receiver.owner.avatar = element.avatar;
+                                        receiver.createdAt = element.createdAt;
+                                        if (element.url) {
+                                            receiver.i_urls = [];
+                                            receiver.i_urls.push(element.url);
+                                        }
+                                    }
+                                    swap.senderItem = sender;
+                                    swap.receiverItem = receiver;
+                                    swaps.push(swap);
+                                }
+                            });
+                            resolve(swaps);
+                        }
+                        else {
+                            reject('no swaps available');
+                        }
+                    }).catch((error) => [
+                        reject(error)
+                    ]);
+                }
+                else {
+                    reject('invalid swap request type');
+                }
+            });
+        });
+    }
     ask(object) {
         const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
@@ -50,8 +180,7 @@ let SwapRequestRepositoryImp = SwapRequestRepositoryImp_1 = class SwapRequestRep
                 this.isRequestAlreadyThere(object.senderItem.id, object.receiverItem.id)
                     .then((res) => {
                     if (res) {
-                        console.log('there is a perior request');
-                        console.log(res);
+                        //console.log(res)
                         resolve(res);
                     }
                     else {
@@ -93,9 +222,27 @@ let SwapRequestRepositoryImp = SwapRequestRepositoryImp_1 = class SwapRequestRep
                         this.userItem.getOneItemByIdInt(res.receiver_item)
                             .then((receiverItem) => {
                             let request = this.dataMapper.toDomain(res);
-                            request.senderItem = senderItem;
-                            request.receiverItem = receiverItem;
-                            resolve(request);
+                            this._repository.perform('select url from itemimages where item=' + receiverItem.id.toString())
+                                .then((res) => {
+                                receiverItem.i_urls = [];
+                                res.forEach(element => {
+                                    receiverItem.i_urls.push(element.url);
+                                });
+                                this._repository.perform('select url from itemimages where item=' + senderItem.id.toString())
+                                    .then((res) => {
+                                    senderItem.i_urls = [];
+                                    res.forEach(element => {
+                                        senderItem.i_urls.push(element.url);
+                                    });
+                                    request.senderItem = senderItem;
+                                    request.receiverItem = receiverItem;
+                                    resolve(request);
+                                }).catch((error) => {
+                                    reject(error);
+                                });
+                            }).catch((error) => {
+                                reject(error);
+                            });
                         }).catch((err) => {
                             reject(err);
                         });

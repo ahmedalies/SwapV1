@@ -54,6 +54,7 @@ export class RepositoryImp<DomainEntity, DALEntity> implements Repository<Domain
             .then((res: DALEntity[]) => {
                 let domainEntities = [];
                 res.forEach((item) => {
+                    //console.log(this._dataMapper.toDomain(item))
                     domainEntities.push(this._dataMapper.toDomain(item));
                 });
                 return Promise.resolve(domainEntities);

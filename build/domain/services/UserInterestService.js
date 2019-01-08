@@ -73,7 +73,7 @@ let UserInterestService = class UserInterestService {
                     this.userRepo.isValidAccessToken(headers['accesstoken'])
                         .then((res) => {
                         if (res) {
-                            this.userRepo.getInterests(body.userId)
+                            this.userRepo.getInterests(headers['accesstoken'])
                                 .then((res) => {
                                 resolve(res);
                             }).catch((err) => {

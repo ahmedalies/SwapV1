@@ -154,7 +154,7 @@ export class MysqlORMRepository {
                                     //console.log(query)
                                     conn.query(query)
                                         .then((result) => {
-                                            resolve(result)
+                                            //resolve(result)
                                             if (result.length > 0) {
                                                 if (result.length == 1){
                                                     if (model.length > 0){
@@ -178,14 +178,15 @@ export class MysqlORMRepository {
                                                             });
                                                             result[rowCount].uniqueAddedElement = newRow;
                                                             rowCount++
-                                                            console.log(rowCount)
+                                                            //console.log(rowCount)
                                                          });
-                                                         console.log(result);
-                                                         //resolve(result)
+                                                         //console.log(result);
+                                                         resolve(result)
                                                     }
                                                 }
                                                 else {
                                                     let newRow = [];
+                                                    let counter = 0;
                                                     result.forEach(r => {
                                                        selections.forEach(s => {
                                                             let key = '';
@@ -197,13 +198,16 @@ export class MysqlORMRepository {
                                                                 }
                                                                 if (!newRow[key])
                                                                     newRow[key] = [];
-
+                                                            
                                                                 newRow[key].push(r[key]);
                                                             }
                                                        });
-                                                       result[0].uniqueAddedElement = newRow;
+                                                       result[counter].uniqueAddedElement = newRow;
+                                                       counter++
+                                                       newRow = []
                                                     });
-                                                    resolve(result[0])
+                                                    //console.log(result)
+                                                    resolve(result)
                                                 }
                                             } 
                                             else reject('document not found')
@@ -232,11 +236,13 @@ export class MysqlORMRepository {
                                 //console.log(query);
                                 conn.query(query)
                                     .then((res) => {
+                                        //console.log(res)
                                         this.findOne([], [model[0] + '.id'], [res.insertId], 0, model)
-                                            .then((res) => {
-                                                resolve(res);
+                                            .then((finalResult) => {
+                                                //console.log(finalResult)
+                                                resolve(finalResult);
                                             }).catch((err) => {
-                                                console.log(err);
+                                                //console.log(err);
                                                 reject(err.sqlMessage);
                                             });
                                     }).catch((err) => {

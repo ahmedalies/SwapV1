@@ -2,6 +2,7 @@ import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan';
 import * as mongoose from 'mongoose';
 import * as express from 'express';
+import * as path from "path";
 import fetch from 'node-fetch'
 import "reflect-metadata";
 import {Container, inject} from 'inversify';
@@ -161,22 +162,24 @@ server.setConfig((app) => {
     app.use(logger);
     app.use(express.json());
     app.use(express.urlencoded({extended: false}));
+    app.use(express.static(path.join(__dirname, 'images/interests')));
+    app.use(express.static(path.join(__dirname, 'images/items')));
     // app.use(bodyParser.urlencoded({ extended: false }));
     // app.use(bodyParser.json());
 
-    var storage = multer.diskStorage({
+    var interestsStorage = multer.diskStorage({
         destination: function (req, file, cb) {
-          cb(null, './src/images/interests/')
+          cb(null, path.join(__dirname, 'images/interests'))
         },
         filename: function (req, file, cb) {
             if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
                 cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1])
         }
     })
-    let upload = multer({ storage: storage })
-    app.post('/api/v1/admin/interests/add', upload.single('file'), function(req, res){
+    let interestsUpload = multer({ storage: interestsStorage })
+    app.post('/api/v1/admin/interests/add', interestsUpload.single('file'), function(req, res){
         if (req.file && req.body.name && req.body.nameAR && req.body.adminId){
-            req.body.imageUrl = req.file.filename;
+            req.body.imageUrl = 'http://localhost:8000/' + req.file.filename;
             fetch('http://localhost:8000/api/v1/admin/interests/add-inner', { 
                 method: 'POST',
                 body:    JSON.stringify(req.body),
@@ -191,6 +194,48 @@ server.setConfig((app) => {
             .catch((err) => {res.send({error: 'true', message: 'error occured'})})
         } else {
             res.status(200).json({message: 'imageFile, name, nameAR and adminId are required', error: true});
+        }
+        
+    }); 
+
+
+    var itemsStorage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, path.join(__dirname, 'images/items'))
+        },
+        filename: function (req, file, cb) {
+            if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
+                cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1])
+        }
+    })
+    let itemsUpload = multer({ storage: itemsStorage })
+    app.post('/api/v1/user/items/add', itemsUpload.array('files[]', 12), function(req, res){
+        if (req.files && req.body.name && req.body.description && req.body.category){
+            req.body.iUrls = [];
+
+            if(req.files.length) {
+                for (let index = 0; index < req.files.length; index++) {
+                    req.body.iUrls.push('http://localhost:8000/' + req.files[index].filename);
+                }
+            }
+
+            let accesstoken = req.headers['accesstoken']
+            fetch('http://localhost:8000/api/v1/user/items/add-inner', { 
+                method: 'POST',
+                body:    JSON.stringify(req.body),
+                headers: { 
+                    'accesstoken': accesstoken.toString(),
+                    'Content-Type': 'application/json' },
+            })
+            .then((respond) => {
+                if(respond.ok)
+                    res.status(200).json({error: false, message: 'added successfully'})
+                else
+                    res.status(200).send({error: true, message: 'error occured'})
+            })
+            .catch((err) => {res.send({error: 'true', message: 'error occured'})})
+        } else {
+            res.status(200).json({message: 'imageFiles, name, category and description are required', error: true});
         }
         
     }); 

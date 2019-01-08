@@ -65,6 +65,7 @@ let RepositoryImp = class RepositoryImp {
                 .then((res) => {
                 let domainEntities = [];
                 res.forEach((item) => {
+                    //console.log(this._dataMapper.toDomain(item))
                     domainEntities.push(this._dataMapper.toDomain(item));
                 });
                 return Promise.resolve(domainEntities);

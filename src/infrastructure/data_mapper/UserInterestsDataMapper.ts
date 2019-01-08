@@ -22,19 +22,31 @@ export class UserInterestsDataMapper implements EntityDataMapper<DomainUserInter
 
         if(dalObject.uniqueAddedElement) {
             let names = dalObject.uniqueAddedElement['name'];
+            let namesAR = dalObject.uniqueAddedElement['nameAR'];
             let imageUrls = dalObject.uniqueAddedElement['image_url'];
-            let ids = dalObject.uniqueAddedElement['i_id'];
+            let i_ds = dalObject.uniqueAddedElement['i_id'];
+            let iIds = dalObject.uniqueAddedElement['iId'];
 
             let counter = 0;
             userInterest.interests = [];
             if(names && names.length) {
                 names.forEach(element => {
                     let i = {
-                        _id: ids[counter],
+                        id: iIds[counter],
+                        _id: i_ds[counter],
                         name: element,
                         imageUrl: imageUrls[counter]
                     }
                     userInterest.interests.push(i);
+                    counter++
+                });
+            }
+            counter = 0;
+            if(namesAR && namesAR.length){
+                namesAR.forEach(element => {
+                    let i = userInterest.interests[counter];
+                    i.nameAR = element;
+                    userInterest.interests[counter] = i;
                     counter++
                 });
             }

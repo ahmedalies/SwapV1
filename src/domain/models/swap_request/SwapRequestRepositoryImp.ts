@@ -14,6 +14,7 @@ import {SwapRequestCallback} from "./SwapRequestCallback";
 import {MysqlORMRepository} from "../../../infrastructure/implementation/MysqlORMRepository";
 import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
 import { DomainItem } from "../../entities/DomainItem";
+import { DomainUser } from "../../entities/DomainUser";
 
 @injectable()
 export class SwapRequestRepositoryImp extends RepositoryImp<DomainSwapRequest, DALSwapRequest> implements SwapRequestRepository {
@@ -40,13 +41,131 @@ export class SwapRequestRepositoryImp extends RepositoryImp<DomainSwapRequest, D
         }
     }
 
+    public async getSwapRequestsForUser(userId: string|number, type: string): Promise<DomainSwapRequest[]>{
+        let sql = ''
+        if(type === 'running') {
+            sql = "SELECT swaprequests._id,swaprequests.sender_item,swaprequests.receiver_item,swaprequests.created_at,"
+            + " items.id,items.name,items.description,items.owner,items.createdAt,"
+            + " itemimages.url,itemimages.item as itemid,"
+            + " users.id as userid,users.username,users.avatar"
+            + " from items,itemstatus,swaprequests,swapstatus,users,itemimages"
+            + " where items.status=itemstatus.id and itemstatus.state='available'"
+            + " and swaprequests.status=swapstatus.id and swapstatus.state='ongoing'"
+            + " having(items.owner=users.id and"
+            + " items.owner=" + userId.toString()
+            + " and (swaprequests.sender_item=items.id or swaprequests.receiver_item=items.id)"
+            + " and items.id=itemimages.item)"
+        } else if(type === 'accepted') {
+            sql = "SELECT swaprequests._id,swaprequests.sender_item,swaprequests.receiver_item,swaprequests.created_at,"
+            + " swaprequests.receiver_rate,swaprequests.sender_rate,swaprequests.respond_at,"
+            + " items.id,items.name,items.description,items.owner,items.createdAt,"
+            + " itemimages.url,itemimages.item as itemid,"
+            + " users.id as userid,users.username,users.avatar"
+            + " from items,itemstatus,swaprequests,swapstatus,users,itemimages"
+            + " where items.status=itemstatus.id and (itemstatus.state='in-swapping' or itemstatus.state='swapped')"
+            + " and swaprequests.status=swapstatus.id and swapstatus.state='accepted'"
+            + " having(items.owner=users.id and"
+            + " items.owner=" + userId.toString()
+            + " and (swaprequests.sender_item=items.id or swaprequests.receiver_item=items.id)"
+            + " and items.id=itemimages.item)"
+        } else if(type === 'rejected') {
+            sql = "SELECT swaprequests._id,swaprequests.sender_item,swaprequests.receiver_item,swaprequests.created_at,"
+            + " swaprequests.receiver_rate,swaprequests.sender_rate,swaprequests.respond_at,"
+            + " items.id,items.name,items.description,items.owner,items.createdAt,"
+            + " itemimages.url,itemimages.item as itemid,"
+            + " users.id as userid,users.username,users.avatar"
+            + " from items,itemstatus,swaprequests,swapstatus,users,itemimages"
+            + " where items.status=itemstatus.id"
+            + " and swaprequests.status=swapstatus.id and swapstatus.state='rejected'"
+            + " having(items.owner=users.id and"
+            + " items.owner=" + userId.toString()
+            + " and (swaprequests.sender_item=items.id or swaprequests.receiver_item=items.id)"
+            + " and items.id=itemimages.item)"
+        }
+        return await new Promise<DomainSwapRequest[]>((resolve, reject) => {
+            if(sql){
+                this.repository.perform(sql)
+                .then((result) => {
+                    if(result && result.length > 0) {
+                        let swapIds = [];
+                        let swaps: DomainSwapRequest[] = [];
+                        result.forEach(element => {
+                            let swap = new DomainSwapRequest();
+                            if(swapIds.indexOf(element._id) >= 0){
+                                let index = swapIds.indexOf(element._id)
+                                if(element.url){
+                                    if(swaps[index].iamTheSender){
+                                        swaps[index].senderItem.i_urls.push(element.url)
+                                    } else {
+                                        swaps[index].receiverItem.i_urls.push(element.url)
+                                    }
+                                }
+                            } else {
+                                swapIds.push(element._id)
+                                swap._id = element._id
+                                swap.createdAt = element.created_at
+                                let sender = new DomainItem();
+                                sender.id = element.sender_item
+                                let receiver = new DomainItem()
+                                receiver.id = element.receiver_item
+                                if(element.sender_rate){
+                                    swap.senderItem
+                                }
+                                if(element.receiver_rate){
+                                    swap.receiverRate
+                                }
+                                if(element.respond_at){
+                                    swap.respondAt
+                                }
+                                if(element.id === element.sender_item){
+                                    swap.iamTheSender = true
+                                    sender.name = element.name
+                                    sender.description = element.description
+                                    sender.owner = new DomainUser()
+                                    sender.owner.name = element.username
+                                    sender.owner.avatar = element.avatar
+                                    sender.createdAt = element.createdAt
+                                    if(element.url){
+                                        sender.i_urls = []
+                                        sender.i_urls.push(element.url)
+                                    }
+                                } else if(element.id === element.receiver_item){
+                                    swap.iamTheSender = false
+                                    receiver.name = element.name
+                                    receiver.description = element.description
+                                    receiver.owner = new DomainUser()
+                                    receiver.owner.name = element.username
+                                    receiver.owner.avatar = element.avatar
+                                    receiver.createdAt = element.createdAt
+                                    if(element.url){
+                                        receiver.i_urls = []
+                                        receiver.i_urls.push(element.url)
+                                    }                                    
+                                }
+                                swap.senderItem = sender
+                                swap.receiverItem = receiver
+                                swaps.push(swap)
+                            }
+                        });
+                        resolve(swaps)
+                    } else {
+                        reject('no swaps available')
+                    }
+                }).catch((error) => [
+                    reject(error)
+                ])
+            } else {
+                reject('invalid swap request type')
+            }
+        })
+    }
+
     public async ask(object: DomainSwapRequest): Promise<DomainSwapRequest> {
         return await new Promise<DomainSwapRequest>((resolve, reject) => {
             this.isRequestAlreadyThere(object.senderItem.id, object.receiverItem.id)
                 .then((res) => {
                     if (res) {
-                        console.log('there is a perior request')
-                        console.log(res)
+                        //console.log(res)
                         resolve(res);
                     } else {
                         console.log('there is no perior request')
@@ -82,16 +201,34 @@ export class SwapRequestRepositoryImp extends RepositoryImp<DomainSwapRequest, D
             this.repository.findOne(['swaprequests.*', 'swapstatus.state as swapStatusString'],
              ['swaprequests._id', 'swaprequests.status'], 
              [swapId, 'swapstatus.id'], 1,
-              ['swaprequests', 'swapstatus'])
+             ['swaprequests', 'swapstatus'])
                 .then((res) => {
                     this.userItem.getOneItemByIdInt(res.sender_item)
                     .then((senderItem) => {
                         this.userItem.getOneItemByIdInt(res.receiver_item)
                         .then((receiverItem) => {
                             let request = this.dataMapper.toDomain(res);
-                            request.senderItem = senderItem;
-                            request.receiverItem = receiverItem;
-                            resolve(request);
+                            this._repository.perform('select url from itemimages where item=' + receiverItem.id.toString())
+                            .then((res) => {
+                                receiverItem.i_urls = []
+                                res.forEach(element => {
+                                    receiverItem.i_urls.push(element.url)    
+                                });
+                                this._repository.perform('select url from itemimages where item=' + senderItem.id.toString())
+                                .then((res) => {
+                                    senderItem.i_urls = []
+                                    res.forEach(element => {
+                                        senderItem.i_urls.push(element.url)    
+                                    });
+                                    request.senderItem = senderItem;
+                                    request.receiverItem = receiverItem;
+                                    resolve(request);
+                                }).catch((error) => {
+                                    reject(error)
+                                })
+                            }).catch((error) => {
+                                reject(error)
+                            })
                         }).catch((err) => {
                             reject(err)
                         })

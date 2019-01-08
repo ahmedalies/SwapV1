@@ -73,6 +73,54 @@ let SwapRequestContoller = class SwapRequestContoller {
             });
         });
     }
+    getRunning(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getRunning(req.body, req.headers)
+                .then((r) => {
+                if (r) {
+                    res.status(200).send({ requests: r, error: false });
+                }
+            }).catch((err) => {
+                res.status(200).send({ message: err, error: true });
+            });
+        });
+    }
+    getAccepted(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getAccepted(req.body, req.headers)
+                .then((r) => {
+                if (r) {
+                    res.status(200).send({ requests: r, error: false });
+                }
+            }).catch((err) => {
+                res.status(200).send({ message: err, error: true });
+            });
+        });
+    }
+    getRejected(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getRejected(req.body, req.headers)
+                .then((r) => {
+                if (r) {
+                    res.status(200).send({ requests: r, error: false });
+                }
+            }).catch((err) => {
+                res.status(200).send({ message: err, error: true });
+            });
+        });
+    }
+    getOneSwap(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getOneSwap(req.params, req.headers)
+                .then((r) => {
+                if (r) {
+                    res.status(200).send({ request: r, error: false });
+                }
+            }).catch((err) => {
+                res.status(200).send({ message: err, error: true });
+            });
+        });
+    }
 };
 __decorate([
     inversify_express_utils_1.httpPost('/ask'),
@@ -95,6 +143,34 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], SwapRequestContoller.prototype, "rejectSwap", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/running'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], SwapRequestContoller.prototype, "getRunning", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/accepted'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], SwapRequestContoller.prototype, "getAccepted", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/rejected'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], SwapRequestContoller.prototype, "getRejected", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/:requestId'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], SwapRequestContoller.prototype, "getOneSwap", null);
 SwapRequestContoller = __decorate([
     inversify_express_utils_1.controller('/user/request'),
     __param(0, inversify_1.inject(types_1.TYPES.SwapRequestService)),

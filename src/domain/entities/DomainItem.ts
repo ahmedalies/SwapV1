@@ -12,5 +12,6 @@ export class DomainItem {
     description: string;
     category: DomainInterest;
     i_urls: any[];
+    swapRequests: any[]
     createdAt: number;
 }

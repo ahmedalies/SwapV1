@@ -27,9 +27,11 @@ import {MysqlORMRepository} from "../../../infrastructure/implementation/MysqlOR
 import {ORMRepository} from "../../../infrastructure/implementation/ORMRepository";
 import { DomainInterest } from "../../entities/DomainInterest";
 import { resolve } from "../../../../node_modules/@types/bluebird";
+import { SwapRequestTypes } from "../swap_request/SwapRequestTypes";
 
 @injectable()
-export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implements UserRepository, SwapRequestCallback {
+export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implements UserRepository, 
+SwapRequestCallback {
 
     constructor(
         @inject(TYPES.ORMRepositoryForUserEntity) private repository: ORMRepository<DALUser>,
@@ -94,6 +96,35 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
                     reject(err);
                 });
         });
+    }
+
+    public async getHome(accessToken: string): Promise<DomainItem[]>{
+        return await new Promise<DomainItem[]>((resolve, reject) => {
+            this.getUser(accessToken)
+            .then((user) => {
+                this.getInterests(accessToken)
+                .then((uInterests) => {
+                    let ids = []
+                    uInterests.interests.forEach(element => {
+                        ids.push(element.id)
+                    })
+                    this.userItem.getAvailableFromCategory(user.id, ids)
+                    .then((items) => {
+                        resolve(items)
+                    })
+                    .catch((error) => {
+                        reject(error)
+                    })
+                }).catch((error) => {
+                    if(error === 'document not found')
+                        reject(user.name + ' does not have selected categories')
+                    else reject(error);
+                })
+            })
+            .catch((error) => {
+                reject(error);
+            })
+        })
     }
 
     public async addInterests(object: DomainUserInterests, accessToken: string): Promise<DomainUserInterests> {
@@ -181,20 +212,15 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
                     if (user.statusString === 'ongoing'){
                         object.owner = user;
                         this.interests.getInterest(object.category._id)
-                            .then((res) => {
-                            object.category.id = res.id;
+                            .then((interest) => {
+                            object.category.id = interest.id;
                                 this.userItem.addItem(object)
                                     .then((item) => {
                                         item.owner = user;
                                         item.owner.password = null;
-                                        this.interests.getInterest(object.category._id)
-                                            .then((res) => {
-                                                item.category = res;
-                                                //item.category.created_by = null;
-                                                resolve(item);
-                                            }).catch((err) => {
-                                                reject(err);
-                                            });
+                                        item.category = interest;
+                                        //item.category.created_by = null;
+                                        resolve(item);
                                     }).catch((err) => {
                                         reject(err);
                                     })
@@ -243,19 +269,35 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
         });
     }
 
-    public async getUserItems(userId: string): Promise<DomainItem[]> {
+    public async getAvailableUserItems(accessToken: string): Promise<DomainItem[]> {
         return await new Promise<DomainItem[]>((resolve, reject) => {
-            this.isUserExist(userId)
+            this.getUser(accessToken)
+            .then((user) => {
+                this.userItem.getAvailableUserItems(user.id)
                 .then((res) => {
-                    this.userItem.getUserItems(res)
-                        .then((res) => {
-                            resolve(res);
-                        }).catch((err) => {
-                            reject(err);
-                        });
+                    resolve(res);
                 }).catch((err) => {
                     reject(err);
                 });
+            }).catch((error) => {
+                reject(error)
+            })
+        });
+    }
+
+    public async getSwappedUserItems(accessToken: string): Promise<DomainItem[]> {
+        return await new Promise<DomainItem[]>((resolve, reject) => {
+            this.getUser(accessToken)
+            .then((user) => {
+                this.userItem.getSwappedUserItems(user.id)
+                .then((res) => {
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+            }).catch((error) => {
+                reject(error)
+            })
         });
     }
 
@@ -376,6 +418,52 @@ export class UserRepositoryImp extends RepositoryImp<DomainUser, DALUser> implem
                     reject(err)
                 });
         });
+    }
+
+    public async getSwapRequestsForUser(accessToken: string, type: SwapRequestTypes): Promise<DomainSwapRequest[]>{
+        return await new Promise<DomainSwapRequest[]>((resolve, reject) => {
+            this.getUser(accessToken)
+            .then((user) => {
+                let t = ''
+                switch (type) {
+                    case SwapRequestTypes.RUNNING:
+                        t = 'running'
+                        break
+                    case SwapRequestTypes.ACCEPTED:
+                        t = 'accepted'
+                        break
+                    case SwapRequestTypes.REJECTED:
+                        t = 'rejected'
+                        break
+                    default:
+                        t = 'running'
+                }
+                this.swapRequest.getSwapRequestsForUser(user.id, t)
+                .then((result) => {
+                    resolve(result)
+                }).catch((error) => {
+                    reject(error)
+                })
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    public async getOneSwap(accessToken: string, swapId: string): Promise<DomainSwapRequest> {
+        return await new Promise<DomainSwapRequest>((resolve, reject) => {
+            this.getUser(accessToken)
+            .then((user) => {
+                this.swapRequest.getSwapRequest(swapId)
+                .then((swap) => {
+                    resolve(swap)
+                }).catch((error) => {
+                    reject(error)
+                })
+            }).catch((err) => {
+                console.log(err);
+            });
+        })
     }
 
     public on24HoursIntervalDone(senderUserId: string, receiverUserId: string, blockSender: boolean, blockReceiver: boolean) {

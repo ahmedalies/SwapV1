@@ -67,7 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserInterestContoller.prototype, "add", null);
 __decorate([
-    inversify_express_utils_1.httpGet('/:userId'),
+    inversify_express_utils_1.httpGet('/:userId/all'),
     __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

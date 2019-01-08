@@ -32,6 +32,7 @@ const UserItemRepositoryImp_1 = require("../user_item/UserItemRepositoryImp");
 const InterestsRepositoryImp_1 = require("../interests/InterestsRepositoryImp");
 const SwapRequestRepositoryImp_1 = require("../swap_request/SwapRequestRepositoryImp");
 const ORMRepository_1 = require("../../../infrastructure/implementation/ORMRepository");
+const SwapRequestTypes_1 = require("../swap_request/SwapRequestTypes");
 let UserRepositoryImp = class UserRepositoryImp extends RepositoryImp_1.RepositoryImp {
     constructor(repository, dataMapper, model, userInterests, interests, userAuth, userItem, swapRequest) {
         super(repository, dataMapper, ['users']);
@@ -100,6 +101,37 @@ let UserRepositoryImp = class UserRepositoryImp extends RepositoryImp_1.Reposito
                         reject('session expired');
                 }).catch((err) => {
                     reject(err);
+                });
+            });
+        });
+    }
+    getHome(accessToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                this.getUser(accessToken)
+                    .then((user) => {
+                    this.getInterests(accessToken)
+                        .then((uInterests) => {
+                        let ids = [];
+                        uInterests.interests.forEach(element => {
+                            ids.push(element.id);
+                        });
+                        this.userItem.getAvailableFromCategory(user.id, ids)
+                            .then((items) => {
+                            resolve(items);
+                        })
+                            .catch((error) => {
+                            reject(error);
+                        });
+                    }).catch((error) => {
+                        if (error === 'document not found')
+                            reject(user.name + ' does not have selected categories');
+                        else
+                            reject(error);
+                    });
+                })
+                    .catch((error) => {
+                    reject(error);
                 });
             });
         });
@@ -194,20 +226,15 @@ let UserRepositoryImp = class UserRepositoryImp extends RepositoryImp_1.Reposito
                     if (user.statusString === 'ongoing') {
                         object.owner = user;
                         this.interests.getInterest(object.category._id)
-                            .then((res) => {
-                            object.category.id = res.id;
+                            .then((interest) => {
+                            object.category.id = interest.id;
                             this.userItem.addItem(object)
                                 .then((item) => {
                                 item.owner = user;
                                 item.owner.password = null;
-                                this.interests.getInterest(object.category._id)
-                                    .then((res) => {
-                                    item.category = res;
-                                    //item.category.created_by = null;
-                                    resolve(item);
-                                }).catch((err) => {
-                                    reject(err);
-                                });
+                                item.category = interest;
+                                //item.category.created_by = null;
+                                resolve(item);
                             }).catch((err) => {
                                 reject(err);
                             });
@@ -259,19 +286,36 @@ let UserRepositoryImp = class UserRepositoryImp extends RepositoryImp_1.Reposito
             });
         });
     }
-    getUserItems(userId) {
+    getAvailableUserItems(accessToken) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield new Promise((resolve, reject) => {
-                this.isUserExist(userId)
-                    .then((res) => {
-                    this.userItem.getUserItems(res)
+                this.getUser(accessToken)
+                    .then((user) => {
+                    this.userItem.getAvailableUserItems(user.id)
                         .then((res) => {
                         resolve(res);
                     }).catch((err) => {
                         reject(err);
                     });
-                }).catch((err) => {
-                    reject(err);
+                }).catch((error) => {
+                    reject(error);
+                });
+            });
+        });
+    }
+    getSwappedUserItems(accessToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                this.getUser(accessToken)
+                    .then((user) => {
+                    this.userItem.getSwappedUserItems(user.id)
+                        .then((res) => {
+                        resolve(res);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                }).catch((error) => {
+                    reject(error);
                 });
             });
         });
@@ -401,6 +445,54 @@ let UserRepositoryImp = class UserRepositoryImp extends RepositoryImp_1.Reposito
                     }
                 }).catch((err) => {
                     reject(err);
+                });
+            });
+        });
+    }
+    getSwapRequestsForUser(accessToken, type) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                this.getUser(accessToken)
+                    .then((user) => {
+                    let t = '';
+                    switch (type) {
+                        case SwapRequestTypes_1.SwapRequestTypes.RUNNING:
+                            t = 'running';
+                            break;
+                        case SwapRequestTypes_1.SwapRequestTypes.ACCEPTED:
+                            t = 'accepted';
+                            break;
+                        case SwapRequestTypes_1.SwapRequestTypes.REJECTED:
+                            t = 'rejected';
+                            break;
+                        default:
+                            t = 'running';
+                    }
+                    this.swapRequest.getSwapRequestsForUser(user.id, t)
+                        .then((result) => {
+                        resolve(result);
+                    }).catch((error) => {
+                        reject(error);
+                    });
+                }).catch((error) => {
+                    reject(error);
+                });
+            });
+        });
+    }
+    getOneSwap(accessToken, swapId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                this.getUser(accessToken)
+                    .then((user) => {
+                    this.swapRequest.getSwapRequest(swapId)
+                        .then((swap) => {
+                        resolve(swap);
+                    }).catch((error) => {
+                        reject(error);
+                    });
+                }).catch((err) => {
+                    console.log(err);
                 });
             });
         });

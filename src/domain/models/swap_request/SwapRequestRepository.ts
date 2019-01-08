@@ -7,6 +7,7 @@ import { DomainItem } from "../../entities/DomainItem";
 export interface SwapRequestRepository extends Repository<DomainSwapRequest> {
     swapRequestCallback: SwapRequestCallback;
 
+    getSwapRequestsForUser(userId: string|number, type: string): Promise<DomainSwapRequest[]>;
     ask(object: DomainSwapRequest): Promise<DomainSwapRequest>;
     getSwapRequest(swapId: string): Promise<DomainSwapRequest>;
     accept(swapId: string, receiverUserId: string): Promise<boolean>;

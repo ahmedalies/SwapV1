@@ -120,7 +120,7 @@ let UserInterestsRepositoryImp = class UserInterestsRepositoryImp extends Reposi
     get(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield new Promise((resolve, reject) => {
-                this.repository.findOne(['userinterests.*', 'interests.name', 'interests.image_url',
+                this.repository.findOne(['userinterests.*', 'interests.nameAR', 'interests.name', 'interests.image_url',
                     'interests.id as iId', 'interests._id as i_id'], ['userinterests.userId', 'userinterests.interestId'], [userId.toString(), 'interests.id'], 1, ['userinterests', 'interests'])
                     .then((res) => {
                     resolve(this.dataMapper.toDomain(res));

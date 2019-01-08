@@ -19,7 +19,7 @@ export class UserInterestContoller implements interfaces.Controller {
             });
     }
 
-    @httpGet('/:userId')
+    @httpGet('/:userId/all')
     public async getUserInterests(@request() req: Request, @response() res: Response){
         await this.service.getUserInterests(req.params, req.headers)
             .then((r) => {

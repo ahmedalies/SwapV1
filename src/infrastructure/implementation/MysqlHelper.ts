@@ -91,9 +91,9 @@ export class MysqlHelper {
                 insertValues.forEach((key) => {
                     valueCounter++;
                     if (valueCounter === insertValues.length){
-                        query = query + "'" + key + "')";
+                        query = query + "\"" + key + "\")";
                     } else {
-                        query = query + "'" + key + "'" + ",";
+                        query = query + "\"" + key + "\"" + ",";
                     }
                 });
             } else {
@@ -112,9 +112,9 @@ export class MysqlHelper {
             insertValues.forEach((key) => {
                 valueCounter++;
                 if (valueCounter === insertValues.length){
-                    query = query + "'" + key + "')";
+                    query = query + "\"" + key + "\")";
                 } else {
-                    query = query + "'" + key + "'" + ",";
+                    query = query + "\"" + key + "\"" + ",";
                 }
             });
         } else {

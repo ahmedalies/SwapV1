@@ -4,6 +4,7 @@ import {DomainUserInterests} from "../../entities/DomainUserInterests";
 import {DomainItem} from "../../entities/DomainItem";
 import {DomainSwapRequest} from "../../entities/DomainSwapRequest";
 import { DomainInterest } from "../../entities/DomainInterest";
+import { SwapRequestTypes } from "../swap_request/SwapRequestTypes";
 
 export interface UserRepository extends Repository<DomainUser> {
     //user functions
@@ -23,12 +24,16 @@ export interface UserRepository extends Repository<DomainUser> {
     addItem(object: DomainItem, accessToken: string): Promise<DomainItem>;
     updateItem(itemId: string, object: DomainItem): Promise<DomainItem>;
     getOneItem(itemId: string, userId: string): Promise<DomainItem>;
-    getUserItems(userId: string): Promise<DomainItem[]>;
+    getAvailableUserItems(accessToken: string): Promise<DomainItem[]>;
+    getSwappedUserItems(accessToken: string): Promise<DomainItem[]>;
     removeItem(itemId: string, userId: string): Promise<boolean>;
+    getHome(accessToken: string): Promise<DomainItem[]>;
 
     //swap request
     ask(object: DomainSwapRequest, accessToken: string): Promise<DomainSwapRequest>;
     accept(accessToken: string, swapId: string): Promise<boolean>;
     reject(accessToken: string, swapId: string, reason: string): Promise<boolean>;
     isFromIndividualToBusiness(senderId: string, receiverId: string): Promise<boolean>;
+    getSwapRequestsForUser(accessToken: string, type: SwapRequestTypes): Promise<DomainSwapRequest[]>;
+    getOneSwap(accessToken: string, swapId: string): Promise<DomainSwapRequest>;
 }

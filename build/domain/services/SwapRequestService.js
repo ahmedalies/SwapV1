@@ -24,6 +24,7 @@ const inversify_1 = require("inversify");
 const types_1 = require("../types");
 const DomainSwapRequest_1 = require("../entities/DomainSwapRequest");
 const DomainItem_1 = require("../entities/DomainItem");
+const SwapRequestTypes_1 = require("../models/swap_request/SwapRequestTypes");
 let SwapRequestService = class SwapRequestService {
     constructor(repository) {
         this.repository = repository;
@@ -31,13 +32,6 @@ let SwapRequestService = class SwapRequestService {
     askForSwap(data, headers) {
         return __awaiter(this, void 0, void 0, function* () {
             let senderItem, receiverItem;
-            if (data.senderItem) {
-                senderItem = new DomainItem_1.DomainItem();
-                senderItem._id = data.senderItem;
-            }
-            else {
-                return Promise.reject('senderItem field does\'t exist');
-            }
             if (data.receiverItem) {
                 receiverItem = new DomainItem_1.DomainItem();
                 receiverItem._id = data.receiverItem;
@@ -45,15 +39,22 @@ let SwapRequestService = class SwapRequestService {
             else {
                 return Promise.reject('receiverItem field does\'t exist');
             }
+            if (data.senderItem) {
+                senderItem = new DomainItem_1.DomainItem();
+                senderItem._id = data.senderItem;
+            }
+            else {
+                return Promise.reject('senderItem field does\'t exist');
+            }
             let swap = new DomainSwapRequest_1.DomainSwapRequest();
             swap.senderItem = senderItem;
             swap.receiverItem = receiverItem;
             return yield new Promise((resolve, reject) => {
-                if (headers && headers['access-token']) {
-                    this.repository.isValidAccessToken(headers['access-token'])
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
                         .then((res) => {
                         if (res) {
-                            this.repository.ask(swap, headers['access-token'])
+                            this.repository.ask(swap, headers['accesstoken'])
                                 .then((res) => {
                                 resolve(res);
                             }).catch((err) => {
@@ -80,11 +81,11 @@ let SwapRequestService = class SwapRequestService {
                 return Promise.reject('requestId does\'t exist');
             }
             return yield new Promise((resolve, reject) => {
-                if (headers && headers['access-token']) {
-                    this.repository.isValidAccessToken(headers['access-token'])
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
                         .then((res) => {
                         if (res) {
-                            this.repository.accept(headers['access-token'], data.requestId)
+                            this.repository.accept(headers['accesstoken'], data.requestId)
                                 .then((res) => {
                                 resolve(res);
                             }).catch((err) => {
@@ -111,11 +112,123 @@ let SwapRequestService = class SwapRequestService {
                 return Promise.reject('requestId does\'t exist');
             }
             return yield new Promise((resolve, reject) => {
-                if (headers && headers['access-token']) {
-                    this.repository.isValidAccessToken(headers['access-token'])
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
                         .then((res) => {
                         if (res) {
-                            this.repository.reject(headers['access-token'], data.requestId, null)
+                            this.repository.reject(headers['accesstoken'], data.requestId, null)
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    return reject('access denied');
+                }
+            });
+        });
+    }
+    getRunning(data, headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getSwapRequestsForUser(headers['accesstoken'], SwapRequestTypes_1.SwapRequestTypes.RUNNING)
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    return reject('access denied');
+                }
+            });
+        });
+    }
+    getAccepted(data, headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getSwapRequestsForUser(headers['accesstoken'], SwapRequestTypes_1.SwapRequestTypes.ACCEPTED)
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    return reject('access denied');
+                }
+            });
+        });
+    }
+    getRejected(data, headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getSwapRequestsForUser(headers['accesstoken'], SwapRequestTypes_1.SwapRequestTypes.REJECTED)
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    return reject('access denied');
+                }
+            });
+        });
+    }
+    getOneSwap(data, headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (data.requestId) { }
+            else {
+                return Promise.reject('requestId does\'t exist');
+            }
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getOneSwap(headers['accesstoken'], data.requestId)
                                 .then((res) => {
                                 resolve(res);
                             }).catch((err) => {

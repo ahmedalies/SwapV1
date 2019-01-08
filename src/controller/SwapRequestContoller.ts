@@ -1,5 +1,5 @@
 import {inject} from "inversify";
-import {controller, httpPost, interfaces, request, response} from "inversify-express-utils";
+import {controller, httpPost, interfaces, request, response, httpGet} from "inversify-express-utils";
 import {TYPES} from "../domain/types";
 import {Request, Response} from "express";
 import { SwapRequestService } from "../domain/services/SwapRequestService";
@@ -44,6 +44,54 @@ export class SwapRequestContoller implements interfaces.Controller {
                 if (r) {
                     res.status(200).send({message: r, error: true});
                 } else {
+                    res.status(200).send({request: r, error: false});
+                }
+            }).catch((err) => {
+                res.status(200).send({message: err, error: true});
+            });
+    }
+
+    @httpGet('/running')
+    public async getRunning(@request() req: Request, @response() res: Response){
+        await this.service.getRunning(req.body, req.headers)
+            .then((r) => {
+                if (r) {
+                    res.status(200).send({requests: r, error: false});
+                }
+            }).catch((err) => {
+                res.status(200).send({message: err, error: true});
+            });
+    }
+
+    @httpGet('/accepted')
+    public async getAccepted(@request() req: Request, @response() res: Response){
+        await this.service.getAccepted(req.body, req.headers)
+            .then((r) => {
+                if (r) {
+                    res.status(200).send({requests: r, error: false});
+                }
+            }).catch((err) => {
+                res.status(200).send({message: err, error: true});
+            });
+    }
+
+    @httpGet('/rejected')
+    public async getRejected(@request() req: Request, @response() res: Response){
+        await this.service.getRejected(req.body, req.headers)
+            .then((r) => {
+                if (r) {
+                    res.status(200).send({requests: r, error: false});
+                }
+            }).catch((err) => {
+                res.status(200).send({message: err, error: true});
+            });
+    }
+    
+    @httpGet('/:requestId')
+    public async getOneSwap(@request() req: Request, @response() res: Response){
+        await this.service.getOneSwap(req.params, req.headers)
+            .then((r) => {
+                if (r) {
                     res.status(200).send({request: r, error: false});
                 }
             }).catch((err) => {

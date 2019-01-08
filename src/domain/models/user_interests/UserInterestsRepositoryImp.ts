@@ -109,7 +109,7 @@ export class UserInterestsRepositoryImp extends RepositoryImp<DomainUserInterest
 
     public async get(userId: number): Promise<DomainUserInterests> {
         return await new Promise<DomainUserInterests>((resolve, reject) => {
-            this.repository.findOne(['userinterests.*', 'interests.name', 'interests.image_url', 
+            this.repository.findOne(['userinterests.*', 'interests.nameAR', 'interests.name', 'interests.image_url', 
             'interests.id as iId', 'interests._id as i_id'], 
             ['userinterests.userId', 'userinterests.interestId'], [userId.toString(), 'interests.id'], 1, 
             ['userinterests', 'interests'])

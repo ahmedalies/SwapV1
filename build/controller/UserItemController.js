@@ -34,18 +34,73 @@ let UserItemController = class UserItemController {
                 .then((r) => {
                 res.status(200).send({ item: r, error: false });
             }).catch((err) => {
+                console.log(err);
+                res.status(500).send({ message: err, error: true });
+            });
+        });
+    }
+    getAvailableUserItems(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getAvailableUserItems(req.headers)
+                .then((r) => {
+                res.status(200).send({ item: r, error: false });
+            }).catch((err) => {
+                console.log(err);
+                res.status(200).send({ message: err, error: true });
+            });
+        });
+    }
+    getSwappedUserItems(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getSwappedUserItems(req.headers)
+                .then((r) => {
+                res.status(200).send({ item: r, error: false });
+            }).catch((err) => {
+                console.log(err);
+                res.status(200).send({ message: err, error: true });
+            });
+        });
+    }
+    getHomeUserItems(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.service.getHomeUserItems(req.headers)
+                .then((r) => {
+                res.status(200).send({ item: r, error: false });
+            }).catch((err) => {
+                console.log(err);
                 res.status(200).send({ message: err, error: true });
             });
         });
     }
 };
 __decorate([
-    inversify_express_utils_1.httpPost('/add'),
+    inversify_express_utils_1.httpPost('/add-inner'),
     __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserItemController.prototype, "addItem", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/available'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserItemController.prototype, "getAvailableUserItems", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/swapped'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserItemController.prototype, "getSwappedUserItems", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/home'),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserItemController.prototype, "getHomeUserItems", null);
 UserItemController = __decorate([
     inversify_express_utils_1.controller('/user/items'),
     __param(0, inversify_1.inject(types_1.TYPES.UserItemService)),

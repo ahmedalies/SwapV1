@@ -31,8 +31,6 @@ let UserItemService = class UserItemService {
     addItem(body, headers) {
         return __awaiter(this, void 0, void 0, function* () {
             let item = new DomainItem_1.DomainItem();
-            // if (body.owner){item.owner = new DomainUser(); item.owner._id = body.owner}
-            // else {return Promise.reject('owner field does\'t exist')}
             if (body.name) {
                 item.name = body.name;
             }
@@ -52,12 +50,18 @@ let UserItemService = class UserItemService {
             else {
                 return Promise.reject('user_item category field does\'t exist');
             }
+            if (body.iUrls) {
+                item.i_urls = body.iUrls;
+            }
+            else {
+                return Promise.reject('user_item iUrls field does\'t exist');
+            }
             return yield new Promise((resolve, reject) => {
-                if (headers && headers['access-token']) {
-                    this.repository.isValidAccessToken(headers['access-token'])
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
                         .then((res) => {
                         if (res) {
-                            this.repository.addItem(item, headers['access-token'])
+                            this.repository.addItem(item, headers['accesstoken'])
                                 .then((res) => {
                                 resolve(res);
                             }).catch((err) => {
@@ -65,13 +69,106 @@ let UserItemService = class UserItemService {
                             });
                         }
                         else {
+                            console.log('session expired');
                             reject('session expired');
                         }
                     }).catch((err) => {
+                        console.log('invalid');
                         reject('session expired or invalid access token, try login');
                     });
                 }
                 else {
+                    console.log('access denied');
+                    return Promise.reject('access denied');
+                }
+            });
+        });
+    }
+    getAvailableUserItems(headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getAvailableUserItems(headers['accesstoken'])
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            console.log('session expired');
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        console.log('invalid');
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    console.log('access denied');
+                    return Promise.reject('access denied');
+                }
+            });
+        });
+    }
+    getSwappedUserItems(headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getSwappedUserItems(headers['accesstoken'])
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            console.log('session expired');
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        console.log('invalid');
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    console.log('access denied');
+                    return Promise.reject('access denied');
+                }
+            });
+        });
+    }
+    getHomeUserItems(headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new Promise((resolve, reject) => {
+                if (headers && headers['accesstoken']) {
+                    this.repository.isValidAccessToken(headers['accesstoken'])
+                        .then((res) => {
+                        if (res) {
+                            this.repository.getHome(headers['accesstoken'])
+                                .then((res) => {
+                                resolve(res);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        }
+                        else {
+                            console.log('session expired');
+                            reject('session expired');
+                        }
+                    }).catch((err) => {
+                        console.log('invalid');
+                        reject('session expired or invalid access token, try login');
+                    });
+                }
+                else {
+                    console.log('access denied');
                     return Promise.reject('access denied');
                 }
             });

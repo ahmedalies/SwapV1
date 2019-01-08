@@ -25,6 +25,10 @@ let ItemDataMapper = class ItemDataMapper {
             let ownerAr = dalObject.uniqueAddedElement['ownerId'];
             let ownerTypeAr = dalObject.uniqueAddedElement['ownerType'];
             let itemState = dalObject.uniqueAddedElement['state'];
+            let ownerName = dalObject.uniqueAddedElement['username'];
+            let itemCategory_ID = dalObject.uniqueAddedElement['interest_id'];
+            let itemCategoryName = dalObject.uniqueAddedElement['interestName'];
+            let itemCategoryNameAR = dalObject.uniqueAddedElement['interestNameAR'];
             if (ownerAr) {
                 item.owner._id = ownerAr[0];
             }
@@ -34,10 +38,25 @@ let ItemDataMapper = class ItemDataMapper {
             if (itemState) {
                 item.statusString = itemState[0];
             }
+            if (ownerName) {
+                item.owner.name = ownerName[0];
+            }
+            if (itemCategory_ID) {
+                item.category = new DomainInterest_1.DomainInterest();
+                item.category._id = itemCategory_ID[0];
+                if (itemCategoryName) {
+                    item.category.name = itemCategoryName[0];
+                }
+                if (itemCategoryNameAR) {
+                    item.category.nameAR = itemCategoryNameAR[0];
+                }
+            }
+        }
+        if (!item.category) {
+            item.category = new DomainInterest_1.DomainInterest();
+            item.category._id = dalObject.category;
         }
         item.i_urls = dalObject.i_urls;
-        item.category = new DomainInterest_1.DomainInterest();
-        item.category._id = dalObject.category;
         item.createdAt = dalObject.createdAt;
         return item;
     }
